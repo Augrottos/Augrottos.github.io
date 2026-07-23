@@ -43,7 +43,7 @@
 <p>以下是Section Header Table里面常见也常用的一些节的名称：<br>——<br>.text：可执行代码。<br>.rodata：只读数据（如字符串常量）。<br>.data：已初始化的全局&#x2F;静态变量。<br>.bss：未初始化的全局&#x2F;静态变量（在文件中不占空间，加载时分配零页内存）。<br>.symtab：符号表（函数和变量的名称和地址）。<br>.strtab：字符串表，存储符号名称等字符串。<br>.dynamic：动态链接信息。<br>.plt 与 .got：动态链接的过程链接表和全局偏移表。<br>.shstrtab：节区名称字符串表。<br>——</p>
 <p>输出的信息中包括：<br>——<br>Name：节的名称<br>Type：节的类型（暂时不知道这个地方的分类…）<br>Addr：节在文件中的地址。<br>Off：相对上一个节的地址偏移量<br>Flg&#x2F;Flag：权限<br>——</p>
 <p>通过节表我们就可以看到具体的节在程序中的相对地址了。</p>
-<p>–ELF的程序头（Program Headers）<br>只有Executable和Shared object文件有文件头表。<br>程序头的作用在于：指导操作系统如何将文件加载到内存，它主要描述各个段（Segments）的信息，而这些段就是<br>可以通过</p>
+<p>–ELF的程序头（Program Headers）<br>只有Executable和Shared object文件有文件头表。<br>程序头的作用在于：指导操作系统如何将文件加载到内存，它主要描述各个段（Segments）的信息。<br>可以通过</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">readelf -l [filename]</span><br></pre></td></tr></table></figure>
 <p>来查看程序头。<br><img src="/images/elfprog1.png"></p>
 <p>一些常见的段类型：<br>——<br>LOAD：需要被加载到内存的段。一个程序通常至少有一个可执行的 LOAD 段（代码）和一个可写的 LOAD 段（数据）。从权限视角，分为只读段（包含 .text 和 .rodata节）和可读写段（包含 .data 和 .bss 节）。<br>DYNAMIC：包含动态链接信息。<br>INTERP：指定动态链接器的路径。<br>——</p>
