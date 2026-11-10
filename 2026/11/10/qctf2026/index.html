@@ -1,0 +1,662 @@
+<!doctype html>
+<html lang="en"><head><meta name="robots" content="noindex, nofollow"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>?CTF2026 Writeup (Misc/Reverse/Crypto) - Augrottos&#039; Study Notes</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Augrottos&#039; Study Notes"><meta name="msapplication-TileImage" content="https://wiki.arcaea.cn/images/7/7d/Core_scarlet.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Augrottos&#039; Study Notes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="比赛队伍：miniDurin（个人）；比赛排名：???；比赛复现地址：https:&amp;#x2F;&amp;#x2F;www.ctfplus.cn&amp;#x2F;learning&amp;#x2F;problem&amp;#x2F;excellent-problemSet&amp;#x2F;detail&amp;#x2F;2119756644949692416 前言这是小杜林，他很可爱。所有人都应该喜欢小杜林。  这次写一半被排行榜隐藏了，原因是自定义解壳那题因为做过类似的方法所以立马解出来了然后拿了一血然后被g"><meta property="og:type" content="blog"><meta property="og:title" content="Augrottos&#039; Study Notes"><meta property="og:url" content="https://augrottos.github.io/"><meta property="og:site_name" content="Augrottos&#039; Study Notes"><meta property="og:description" content="比赛队伍：miniDurin（个人）；比赛排名：???；比赛复现地址：https:&amp;#x2F;&amp;#x2F;www.ctfplus.cn&amp;#x2F;learning&amp;#x2F;problem&amp;#x2F;excellent-problemSet&amp;#x2F;detail&amp;#x2F;2119756644949692416 前言这是小杜林，他很可爱。所有人都应该喜欢小杜林。  这次写一半被排行榜隐藏了，原因是自定义解壳那题因为做过类似的方法所以立马解出来了然后拿了一血然后被g"><meta property="og:locale" content="en_US"><meta property="og:image" content="https://avatars.githubusercontent.com/u/268848168?s=400&amp;u=a8c9a01792e6cf06504e591c3a51a49955b77926&amp;v=4"><meta property="article:published_time" content="2026-11-10T12:50:00.000Z"><meta property="article:modified_time" content="2026-11-10T12:50:00.000Z"><meta property="article:author" content="Augrottos"><meta property="article:tag" content="学习"><meta property="article:tag" content="CTF"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://avatars.githubusercontent.com/u/268848168?s=400&amp;u=a8c9a01792e6cf06504e591c3a51a49955b77926&amp;v=4"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://augrottos.github.io/2026/11/10/qctf2026/"},"headline":"Augrottos' Study Notes","image":[],"datePublished":"2026-11-10T12:50:00.000Z","dateModified":"2026-11-10T12:50:00.000Z","author":{"@type":"Person","name":"Augrottos"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject"}},"description":"比赛队伍：miniDurin（个人）；比赛排名：???；比赛复现地址：https:&#x2F;&#x2F;www.ctfplus.cn&#x2F;learning&#x2F;problem&#x2F;excellent-problemSet&#x2F;detail&#x2F;2119756644949692416 前言这是小杜林，他很可爱。所有人都应该喜欢小杜林。  这次写一半被排行榜隐藏了，原因是自定义解壳那题因为做过类似的方法所以立马解出来了然后拿了一血然后被g"}</script><link rel="canonical" href="https://augrottos.github.io/2026/11/10/qctf2026/"><link rel="icon" href="https://wiki.arcaea.cn/images/7/7d/Core_scarlet.png"><meta name="referrer" content="no-referrer-when-downgrade"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/5.12.0/css/all.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css?family=Ubuntu:400,600|Source+Code+Pro|Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Microsoft YaHei:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&amp;amp;subset=latin,latin-ext|Inconsolata|Itim|Lobster.css"><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="/js/globalUtils.js"></script><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-3-column has-navbar-fixed-top"><nav class="navbar navbar-main is-fixed-top"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="https://wiki.arcaea.cn/images/avatars/2034/original.png?ver=69c51bd8" alt="Augrottos&#039; Study Notes" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/tags">Tags</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Join Gitter" href="https://gitter.im/hexo-theme-amazing/community"><i class="fab fa-gitter"></i></a><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/removeif/hexo-theme-amazing"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="Catalogue" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a><a class="navbar-item" id="night-nav" title="Night Mode" href="javascript:;"><i class="fas fa-moon" id="night-icon"></i></a></div></div></div></nav><script type="text/javascript" src="/js/theme-setting.js"></script><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-9-widescreen"><!--!--><div class="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><i class="far fa-calendar-plus"> </i>2026-11-10  <a class="commentCountImg" href="/2026/11/10/qctf2026/#comment-container"><span class="display-none-class">/2026/11/10/qctf2026/</span><i class="far fa-comment-dots"></i> <span class="commentCount" id="19162c83acfb849acc4a62cf9c203c11">99+</span>  </a><span class="level-item"><i class="far fa-clock"> </i>an hour  <i class="fas fa-pencil-alt"> </i>12.3 k</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>&nbsp;visits</span></div></div><h1 class="title is-3 is-size-4-mobile">?CTF2026 Writeup (Misc/Reverse/Crypto)</h1><div class="content"><p>比赛队伍：miniDurin（个人）；比赛排名：???；比赛复现地址：<a target="_blank" rel="noopener" href="https://www.ctfplus.cn/learning/problem/excellent-problemSet/detail/2119756644949692416">https://www.ctfplus.cn/learning/problem/excellent-problemSet/detail/2119756644949692416</a></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><strong>这是小杜林，他很可爱。所有人都应该喜欢小杜林。</strong></p>
+<p><img src="/images/qctf2026/image1.jpeg"></p>
+<p>这次写一半被排行榜隐藏了，原因是自定义解壳那题因为做过类似的方法所以立马解出来了然后拿了一血然后被gank了（。</p>
+<p>其实没什么，没被ban已经不错了，不关注排行榜之后我就可以不用去做不熟练的cryp&#x2F;web&#x2F;pwn题来跟炸鱼选手抢分了，安安心心做re&#x2F;misc来学些东西就好。题目质量很不错，手搓很快乐。</p>
+<p>因为自己主攻的方向是re而其它方向知识量基本为0所以只做了re题和misc题，同时(AI含量极高地)做了几道密码题，剩下方向碰都没碰（逃）。</p>
+<p>w3&#x2F;w4这两周忙着做别的事几乎完全没碰比赛了，十分抱歉！！w3的RE题目还是粗略看了的，剩下两道cpp噩梦和signal目前还不知道怎么解，w4直到我现在写wp的时候都没几个解出，难度梯度会不会有点太大了，让孩子缓缓。等官方wp了，我好好学点东西。</p>
+<p>关于AI使用：在一些地方使用了网页版DeepSeek，主要用于生成各种脚本（孩子实在不会手搓脚本）和一部分方法&#x2F;指令的检索。wp纯手写，因为是拿word写的所以写完丢给agent让他排了一下版。</p>
+<span id="more"></span>
+
+<hr>
+<h2 id="WEEK1"><a href="#WEEK1" class="headerlink" title="WEEK1"></a>WEEK1</h2><h3 id="OSINT"><a href="#OSINT" class="headerlink" title="OSINT"></a>OSINT</h3><p><img src="/images/qctf2026/image2.jpeg"></p>
+<p>题目有提到“活动”，看完整张图似乎只有广场上一个很显眼的牌子跟某场活动有直接关系。把图放到最大可以隐隐约约看到几个字：</p>
+<p><img src="/images/qctf2026/image3.png"></p>
+<p>“徒步起点更改为防？纪念？广场”</p>
+<p>其实搜一下就能搜出来了，搜完一看时间还挺近的，可能就是想要的答案，不错</p>
+<p><img src="/images/qctf2026/image4.png"></p>
+<p>那么后两问的答案就很明显了，第一问因为我懒得通过图片找地点，所以通过搜索这个活动的更多信息找到了修改地址以前的推文</p>
+<p><a target="_blank" rel="noopener" href="https://harbin.joyhua.cn/hebrb/20260512/mhtml/page_01_content_20260512002004.htm#page1">哈尔滨日报-新晚报万人徒步嘉年华装备补领通道开启</a></p>
+<p><img src="/images/qctf2026/image5.png"></p>
+<p>又到网上找了一下哈尔滨人民广场的图片，确认就是图中的这个建筑。</p>
+<p>所以flag：?CTF{哈尔滨市_人民广场_哈尔滨大剧院}</p>
+<p>很好玩的OSINT，不是那种丢给识图秒出而不丢又出不了的找地点，我很喜欢。唯一缺点是第一题答案是哈尔滨市不是哈尔滨卡了我一下（？）</p>
+<h3 id="Base家族"><a href="#Base家族" class="headerlink" title="Base家族"></a>Base家族</h3><p>题目明说了解法，但是怎么解呢。</p>
+<p>首先在Cyberchef里面能够解两层：一层base64，一层base32（这块试一试就出来了）。</p>
+<p><img src="/images/qctf2026/image6.png"></p>
+<p>最后得到的这串字符串有一堆符号，推测是一个比base64更多字符的base编码。</p>
+<p>（因为Cyberchef这里只有base85所以卡了好久，然后上网搜了一下，把base62 base85 base91 base92挨个试了一遍，最后发现是base92）</p>
+<p>使用在线工具<a target="_blank" rel="noopener" href="https://wnkit.com/tool/base92-encoder-decoder">Base92 编码&#x2F;解码 - 万能工具集</a></p>
+<p><img src="/images/qctf2026/image7.png"></p>
+<h3 id="压缩包"><a href="#压缩包" class="headerlink" title="压缩包"></a>压缩包</h3><p>题目很明显在提示伪加密。下载下来一看需要密码就丢进ZipCenOP去伪加密，成功解出第一层</p>
+<p><img src="/images/qctf2026/image8.png"></p>
+<p>解开后发现里面还有一个加密的压缩包，又用ZipCenOP去加密之后解压结果报错，结合题目看来这个应该是真加密了。</p>
+<p>先梳理一下第一层压缩包里面有的东西：一个fakeflag，和一串用得上的字符串：qctf2026????</p>
+<p>这个看起来要不就是flag.txt的内容，要不就是压缩包的密码。</p>
+<p>所以同时尝试了两条路：明文爆破，以及爆破密码。（先直接复制进压缩包发现不对，后面意识到？可能是占位符，于是尝试进行密码爆破。）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">zip2john final.zip &gt; zip.hash</span><br><span class="line">hashcat -m 17210 -a 3 -1 <span class="string">&#x27; ?l?u?d?s&#x27;</span> zip.hash <span class="string">&#x27;qctf2026?1?1?1?1&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>最后爆破出zip密码qctf2026g0od</p>
+<p>Flag：?CTF{Thi3_is_@_ez_z1p!}</p>
+<h3 id="Multilingual"><a href="#Multilingual" class="headerlink" title="Multilingual"></a>Multilingual</h3><p><img src="/images/qctf2026/image9.png"></p>
+<p><img src="/images/qctf2026/image10.png"></p>
+<p>中间那段本来就不需要解码。</p>
+<p>CyberChef大显神威时间</p>
+<p>拿乱码+全角字符来出题有点好玩的，和那些base的解码思路都不同，我喜欢</p>
+<p>Flag：?CTF{N3w_W0r1d_0f_3nc0d1ngs}</p>
+<h3 id="HelloAssembly"><a href="#HelloAssembly" class="headerlink" title="HelloAssembly"></a>HelloAssembly</h3><p>汇编代码题耶，我喜欢，正好正在学这个</p>
+<p>先看一眼需求的flag格式：</p>
+<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmp</span> <span class="built_in">byte</span> <span class="built_in">ptr</span> [input_buf+<span class="number">1</span>], FLAG_LEN</span><br><span class="line"><span class="keyword">jne</span> failed</span><br></pre></td></tr></table></figure>
+
+<p>这里很明显是对flag的长度做出要求，看一眼上面的FLAG_LEN&#x3D;$ - cipher，也就是flag的长度&#x3D;cipher的长度&#x3D;32；</p>
+<p>然后看一眼检查函数check_loop:</p>
+<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">mov</span> <span class="built_in">al</span>, [<span class="built_in">si</span>]</span><br><span class="line"><span class="keyword">xor</span> <span class="built_in">al</span>, key[<span class="built_in">bx</span>]</span><br><span class="line"><span class="keyword">add</span> <span class="built_in">al</span>, <span class="number">3</span></span><br></pre></td></tr></table></figure>
+
+<p>[si]是input_buf+2，也就是输入的首字符，这里是对输入字符与key的对应位异或再+3；</p>
+<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmp</span> <span class="built_in">al</span>, [<span class="built_in">di</span>]</span><br><span class="line"><span class="keyword">jne</span> failed</span><br></pre></td></tr></table></figure>
+
+<p>将计算完的结果与di（[di]是cipher，也就是密文的对应字符）比较，不相等则失败；</p>
+<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">inc</span> <span class="built_in">si</span></span><br><span class="line"><span class="keyword">inc</span> <span class="built_in">di</span></span><br></pre></td></tr></table></figure>
+
+<p>将si与di都自增，也就是移动到下一个地址；</p>
+<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">inc</span> <span class="built_in">bx</span></span><br><span class="line"><span class="keyword">cmp</span> <span class="built_in">bx</span>, KEY_LEN</span><br><span class="line"><span class="keyword">jb</span> key_ready</span><br><span class="line"><span class="keyword">xor</span> <span class="built_in">bx</span>, <span class="built_in">bx</span></span><br></pre></td></tr></table></figure>
+
+<p>在loop之前bx最后的操作是自身异或（相当于赋值为0），这里的操作是自增、和key长度相比较，如果低于keylen则直接跳转到key_ready函数，否则置零再自动，也就是一个密钥循环使用的逻辑。</p>
+<p>那么使用python反向写：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">key = <span class="string">b&#x27;Hello&#x27;</span></span><br><span class="line">cipher = <span class="built_in">bytes</span>([整个数组复制下来])</span><br><span class="line">flag = <span class="built_in">bytes</span>(((c - <span class="number">3</span>) &amp; <span class="number">0xFF</span>) ^ key[i % <span class="number">5</span>] <span class="keyword">for</span> i, c <span class="keyword">in</span> <span class="built_in">enumerate</span>(cipher))</span><br></pre></td></tr></table></figure>
+
+<p>就可以得到flag：QCTF{We1come_To_Assemb1y_Wor1d!}</p>
+<h3 id="meowmeow"><a href="#meowmeow" class="headerlink" title="meowmeow"></a>meowmeow</h3><p>reverse好习惯之先丢DIE</p>
+<p><img src="/images/qctf2026/image11.png"></p>
+<p>看到有个Packer，但是不是UPX有点奇怪，还没见过这种东西。</p>
+<p>问了一下DS说只是附加数据，没有壳，那没事了</p>
+<p>那就把附加数据dump一下</p>
+<p><img src="/images/qctf2026/image12.png"></p>
+<p>看到这一串我以为是节表什么之类的，去问了一下DS说是符号表&#x2F;调试信息，对程序运行没有影响，仅仅起到一个提示符号名的作用，疑似是出题人做完忘删了（？）</p>
+<p>那就IDA启动了，上来一个shift+F12看一眼字符串</p>
+<p><img src="/images/qctf2026/image13.png"></p>
+<p>32这个数字跟TEA一起出现基本上就已经知道加密算法了 嗯对</p>
+<p>点进main函数看看（偷懒直接F5了）</p>
+<p><img src="/images/qctf2026/image14.png"></p>
+<p>还有IDB，有点坏。但是这题好像不用动调来着</p>
+<p>V8是最后的输出，来看看它需要满足的条件：</p>
+<ul>
+<li>v8&#x3D;(n24&#x3D;&#x3D;24)，要求总长度是24；</li>
+<li>v4&#x3D;0，而v4要求是输入的前五个字符是flag{；</li>
+<li>输入的第24个字符是ASCII125（}）;</li>
+<li>使得check_flag校验通过；</li>
+</ul>
+<p>那么接着就是check_flag函数：</p>
+<p><img src="/images/qctf2026/image15.png"></p>
+<p>一个加密，将加密后的结果与期待的加密结果对比，若相同则校验通过。</p>
+<p>点进加密逻辑看一眼：</p>
+<p><img src="/images/qctf2026/image16.png"></p>
+<p>很明显的tea逻辑。对比最标准的tea加密算法发现把a2&lt;&lt;4换成了a2* *16。</p>
+<p>但是问了一嘴ds发现这俩运算是等价的（事后想想好像确实是这样，纯粹是我自己对移位操作不熟悉）。</p>
+<p>那就直接上网搜一个tea解密的脚本，把变量填进去就出来了。</p>
+<p>解密脚本：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> struct</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">tea_decrypt</span>(<span class="params">v0, v1, k</span>):</span><br><span class="line">    delta = <span class="number">0x9E3779B9</span></span><br><span class="line">    <span class="built_in">sum</span> = (delta * <span class="number">32</span>) &amp; <span class="number">0xFFFFFFFF</span></span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32</span>):</span><br><span class="line">        v1 = (v1 - (((v0 &lt;&lt; <span class="number">4</span>) + k[<span class="number">2</span>]) ^ (v0 + <span class="built_in">sum</span>) ^ ((v0 &gt;&gt; <span class="number">5</span>) + k[<span class="number">3</span>]))) &amp; <span class="number">0xFFFFFFFF</span></span><br><span class="line">        v0 = (v0 - (((v1 &lt;&lt; <span class="number">4</span>) + k[<span class="number">0</span>]) ^ (v1 + <span class="built_in">sum</span>) ^ ((v1 &gt;&gt; <span class="number">5</span>) + k[<span class="number">1</span>]))) &amp; <span class="number">0xFFFFFFFF</span></span><br><span class="line">        <span class="built_in">sum</span> = (<span class="built_in">sum</span> - delta) &amp; <span class="number">0xFFFFFFFF</span></span><br><span class="line">    <span class="keyword">return</span> v0, v1</span><br><span class="line">key_bytes = <span class="built_in">bytes</span>.fromhex(<span class="string">&quot;4D 65 6F 77 6D 65 6F 77 6D 69 73 73 6B 65 79 21&quot;</span>)</span><br><span class="line">k = <span class="built_in">list</span>(struct.unpack(<span class="string">&quot;&lt;4I&quot;</span>, key_bytes))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;密钥 k =&quot;</span>, [<span class="built_in">hex</span>(x) <span class="keyword">for</span> x <span class="keyword">in</span> k])</span><br><span class="line">cipher = <span class="built_in">bytes</span>.fromhex(<span class="string">&quot;05 7C E0 F0 B9 8A DF 6D B9 06 82 9E F8 14 31 BD EF 4F 71 0B FC 56 7F 17&quot;</span>)</span><br><span class="line"></span><br><span class="line">plain = <span class="string">b&quot;&quot;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="number">24</span>, <span class="number">8</span>):</span><br><span class="line">    block = cipher[i:i+<span class="number">8</span>]</span><br><span class="line">    v0, v1 = struct.unpack(<span class="string">&quot;&lt;2I&quot;</span>, block)</span><br><span class="line">    v0, v1 = tea_decrypt(v0, v1, k)</span><br><span class="line">    plain += struct.pack(<span class="string">&quot;&lt;2I&quot;</span>, v0, v1)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;解密结果:&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(plain)</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="built_in">print</span>(plain.decode())</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;包含非打印字符，十六进制：&quot;</span>, plain.<span class="built_in">hex</span>())</span><br></pre></td></tr></table></figure>
+
+<p>得到flag</p>
+<p><img src="/images/qctf2026/image17.png"></p>
+<h3 id="intro"><a href="#intro" class="headerlink" title="intro"></a>intro</h3><p>file一下看到是ELF，丢进DIE没什么异常，于是IDA打开看到main函数</p>
+<p><img src="/images/qctf2026/image18.png"></p>
+<p>看了眼左边的函数表也没什么其它的函数，核心的校验逻辑也就在这个main的循环里。</p>
+<p>是对输入的字符与aCtf2026（字符串”?ctf2026”）进行循环异或，再把结果与期望的密文byte_2010作对比，如果逐位一致则输出“correct“。</p>
+<p>根据加密的逻辑来写脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">key = <span class="string">b&quot;?ctf2026&quot;</span></span><br><span class="line">target = <span class="built_in">bytes</span>([</span><br><span class="line">    <span class="number">0x59</span>,<span class="number">0x0F</span>,<span class="number">0x15</span>,<span class="number">0x01</span>,<span class="number">0x49</span>,<span class="number">0x05</span>,<span class="number">0x03</span>,<span class="number">0x5B</span>,<span class="number">0x4F</span>,<span class="number">0x52</span>,<span class="number">0x47</span>,<span class="number">0x39</span>,</span><br><span class="line">    <span class="number">0x4A</span>,<span class="number">0x00</span>,<span class="number">0x40</span>,<span class="number">0x69</span>,<span class="number">0x5C</span>,<span class="number">0x11</span>,<span class="number">0x40</span>,<span class="number">0x05</span>,<span class="number">0x59</span>,<span class="number">0x03</span>,<span class="number">0x56</span>,<span class="number">0x69</span>,</span><br><span class="line">    <span class="number">0x09</span>,<span class="number">0x52</span>,<span class="number">0x47</span>,<span class="number">0x51</span>,<span class="number">0x03</span>,<span class="number">0x56</span>,<span class="number">0x04</span>,<span class="number">0x0E</span>,<span class="number">0x5E</span>,<span class="number">0x02</span>,<span class="number">0x15</span>,<span class="number">0x03</span>,<span class="number">0x57</span>,</span><br><span class="line">    <span class="number">0x05</span>,<span class="number">0x00</span>,<span class="number">0x03</span>,<span class="number">0x0E</span>,<span class="number">0x06</span>,<span class="number">0x4C</span>,<span class="number">0x04</span>,<span class="number">0x01</span>,<span class="number">0x55</span>,<span class="number">0x04</span>,<span class="number">0x55</span>,<span class="number">0x59</span>,<span class="number">0x5B</span>,<span class="number">0x43</span>,</span><br><span class="line">    <span class="number">0x51</span>,<span class="number">0x54</span>,<span class="number">0x55</span>,<span class="number">0x0B</span>,<span class="number">0x04</span>,<span class="number">0x5D</span>,<span class="number">0x50</span>,<span class="number">0x46</span>,<span class="number">0x03</span>,<span class="number">0x04</span>,<span class="number">0x02</span>,<span class="number">0x0A</span>,</span><br><span class="line">    <span class="number">0x00</span>,<span class="number">0x42</span></span><br><span class="line">])</span><br><span class="line"></span><br><span class="line">flag = <span class="built_in">bytes</span>(t ^ key[i % <span class="number">8</span>] <span class="keyword">for</span> i, t <span class="keyword">in</span> <span class="built_in">enumerate</span>(target))</span><br><span class="line"><span class="built_in">print</span>(flag.decode())</span><br></pre></td></tr></table></figure>
+
+<p>得到flag：flag{51mp13_x0r_cr4ck3d_61371f68aaaee5251e8b3e6cf877fe92b32e6286}</p>
+<h3 id="零"><a href="#零" class="headerlink" title="零"></a>零</h3><p>拿到图先丢aperisolve，看到binwalk有输出结果（这里是wsl的binwalk输出）</p>
+<p><img src="/images/qctf2026/image19.png"></p>
+<p>然后提取zip（脚本是ai写的），在提取出来的zip里面得到了flag的后半段：?CTF2026_H@ve_Funn!}</p>
+<p><img src="/images/qctf2026/image20.png"></p>
+<p>然后提取出zip之后把除掉zip之外的干净图片再丢入aperisolve：</p>
+<p><img src="/images/qctf2026/image21.png"></p>
+<p>在zsteg这一栏看到了flag的前半段。</p>
+<h3 id="StrangeRC4"><a href="#StrangeRC4" class="headerlink" title="StrangeRC4"></a>StrangeRC4</h3><p>先DIE看一眼没问题，然后IDA打开文件。</p>
+<p>Shift+f12看一眼字符串，结合给出的flag.enc这个程序看起来像是只做加密的程序。</p>
+<p><img src="/images/qctf2026/image22.png"></p>
+<p>干嘛…</p>
+<p>查看交叉引用之后能找到main函数的位置，前面有一些错误处理&#x2F;输入提示的ifelse条件句，比较核心的加密逻辑应该在中间这一段：</p>
+<p><img src="/images/qctf2026/image23.png"></p>
+<p>函数还是好多。这个时候我想起来之前在IDA里面有个操作似乎可以恢复printf、malloc这类函数的名字，可以大大降低我读代码的难度，于是去问DS他说可以通过导入.sig文件的方式来恢复一部分函数名，正好DIE能看到编译器信息，于是把vs64的sig文件都导入了一遍</p>
+<p><img src="/images/qctf2026/image24.png"></p>
+<p>舒服多了，而且能看出来2B3F函数是printf，剩下几个函数一个个看就可以了。</p>
+<p>因为我没学过rc4..所以算法这块是让ai分析算法并给出的脚本。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">variant_rc4_decrypt</span>(<span class="params">key, cipher</span>):</span><br><span class="line">    S = <span class="built_in">list</span>(<span class="built_in">range</span>(<span class="number">256</span>))</span><br><span class="line">    j = <span class="number">0</span></span><br><span class="line">    keylen = <span class="built_in">len</span>(key)</span><br><span class="line">    <span class="comment"># KSA</span></span><br><span class="line">    <span class="keyword">for</span> n <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">256</span>):</span><br><span class="line">        j = (j + key[n % keylen] + S[n]) &amp; <span class="number">0xFF</span></span><br><span class="line">        S[n], S[j] = S[j], S[n]</span><br><span class="line">    i_rc4 = <span class="number">0</span></span><br><span class="line">    j_rc4 = <span class="number">0</span></span><br><span class="line">    out = <span class="built_in">bytearray</span>()</span><br><span class="line">    <span class="keyword">for</span> byte <span class="keyword">in</span> cipher:</span><br><span class="line">        byte = (byte - <span class="number">1</span>) &amp; <span class="number">0xFF</span></span><br><span class="line">        <span class="comment"># PRGA</span></span><br><span class="line">        i_rc4 = (i_rc4 + <span class="number">1</span>) &amp; <span class="number">0xFF</span></span><br><span class="line">        j_rc4 = (j_rc4 + <span class="number">1</span>) &amp; <span class="number">0xFF</span>         </span><br><span class="line">        S[i_rc4], S[j_rc4] = S[j_rc4], S[i_rc4]</span><br><span class="line">        K = S[(i_rc4 + j_rc4) &amp; <span class="number">0xFF</span>]      </span><br><span class="line">        out.append(byte ^ K)</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">bytes</span>(out)</span><br><span class="line">key = <span class="built_in">bytes</span>.fromhex(<span class="string">&quot;78 56 34 12 91 91 91 91 66 14 45 11 32 54 76 98&quot;</span>)</span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;flag.enc&quot;</span>, <span class="string">&quot;rb&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    cipher = f.read()</span><br><span class="line">plain = variant_rc4_decrypt(key, cipher)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;解密结果（原始字节）:&quot;</span>, plain)</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;解密结果（文本）:&quot;</span>, plain.decode())</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;非文本，十六进制：&quot;</span>, plain.<span class="built_in">hex</span>())</span><br></pre></td></tr></table></figure>
+
+<p>然后很意外（但是事后看来很不意外）地跑出了一堆乱码。</p>
+<p>其实看到题目strange这个前缀的时候我就有种预感，在翻IDA函数列表看到IDB的时候这种预感又更重了。这主要来源于两个方面：</p>
+<p>第一，之前问过学长关于动调的事，他说动调的使用情况一般是“你通过正常路径逆向却发现预期输出有偏差，那么这时就需要进行动态调试&#x2F;反调试了”。</p>
+<p>第二，之前做过一道类似的题：IDB函数通过极其隐蔽的手段藏在CRT初始化流程中，导致一切静态调试或者不尝试反调试的动调都会进入错误分支。</p>
+<p><img src="/images/qctf2026/image25.jpeg"></p>
+<p>（上图为那题的官方wp，而“下面的逻辑”指的就是flag真正的加密方式）</p>
+<p>之前我特地研究过这道类似的题，发现有两个方法可以很好的绕过这个：</p>
+<p>第一是出题人少了个心眼，无论是真逻辑还是假逻辑都引用了最后的判断字符串“Correct!“”Wrong!“，导致看这两个字符串的xref能看到两条，一条是假逻辑，另一条是真逻辑，xref跳到真逻辑就能解出正确的flag了。</p>
+<p>第二是可以直接给IDB函数下断点（感觉进程序之后先看有没有IDB是个好习惯），动调开始时直接给IDB下断点，运行到断点停止就知道何时调用IDB，从而程序何时进入新的分支。</p>
+<p>我先尝试了第一种方法，去看程序里面的字符串。</p>
+<p><img src="/images/qctf2026/image26.png"></p>
+<p>找了一圈发现哈哈，密钥竟然在main之外的地方被引用了，露出鸡脚了吧</p>
+<p>打开xrefs to视图看一眼</p>
+<p><img src="/images/qctf2026/image27.png"></p>
+<p>有三个地方引用了密钥，其中两个地方来自TLS Callback函数，TLS我有学过，这和CRT一样都是在main之前的逻辑（当时做完那题顺便学了），所以密钥很可能在main运行前被动了手脚。</p>
+<p>-这算不算刚开始搜字符串的时候不小心看到TLS_secret的callback？</p>
+<p>那就点开TLS函数看一眼：</p>
+<p><img src="/images/qctf2026/image28.png"></p>
+<p>有三个函数，第一个函数对1400B3000的字节进行了异或0x5A，第二个函数调用IDB，第三个函数对1400B3000的字节异或0x3C。</p>
+<p>这下看懂了。</p>
+<p>所以正确的做法应该是仅仅对密钥做0x5A，然后将其作为新的密钥进行解密，按照之前的脚本逻辑便可以得到flag了。</p>
+<p>flag{Y0u_cr4ck_7h3_57r4ng3_RC4}</p>
+<p>我觉得这题期望做法应该是动调，但是我没有去尝试。我觉得应该按照刚才我说的那种做法，对IDB下断点（或者对密钥下断点，如果知道改的是密钥的话，但是我觉得对IDB下断点更实在）接着在触发断点的时候查看周围函数逻辑或者把IDB返回值设为0也能做出来。</p>
+<p>顺带一提，看IDB的xref第一条就是140007DE0，说不定能从这个地方逃课，但是IDB的xref图太大了且没跟140007DE0直接连上，所以我不确定这么做能不能行。</p>
+<p>这题难度标简单吗，同样是新手赛我之前做的那题好像是个Hard难度来着，我感觉能学的点太多了</p>
+<h3 id="艾克赛尔"><a href="#艾克赛尔" class="headerlink" title="艾克赛尔"></a>艾克赛尔</h3><p>依旧是拖进DIE看没什么问题然后用IDA打开，有符号表直接找到main偷懒按F5</p>
+<p><img src="/images/qctf2026/image29.png"></p>
+<p>迷宫题吗，有意思，这个我也做过类似的</p>
+<p>众所周知迷宫题最重要的是看地图，正好下面有个maze变量</p>
+<p><img src="/images/qctf2026/image30.png"></p>
+<p>这个<code>20*x+y</code>的写法看着就很像是一个二维数组，我把数组截出来丢给DS，他一看总共四百个点位，估计就是一个<code>20*20</code>的迷宫地图了。DS把迷宫画出来如下：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</span><br><span class="line">0 7 1 1 1 1 3 1 1 1 1 1 5 1 1 1 1 1 1 0</span><br><span class="line">0 1 1 1 1 1 1 1 0 0 1 1 1 1 1 1 1 3 1 0</span><br><span class="line">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0</span><br><span class="line">0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0</span><br><span class="line">0 1 1 1 1 1 4 1 1 1 1 1 1 3 1 1 1 1 1 0</span><br><span class="line">0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</span><br><span class="line">0 1 1 1 1 3 1 1 1 1 1 1 1 4 1 1 1 1 1 0</span><br><span class="line">0 1 1 0 0 1 1 1 1 1 1 1 1 1 1 1 1 3 1 0</span><br><span class="line">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0</span><br><span class="line">0 1 1 1 1 1 4 1 1 1 1 1 1 3 1 1 1 1 1 0</span><br><span class="line">0 1 1 1 1 1 1 1 1 0 0 1 1 1 1 1 0 1 1 0</span><br><span class="line">0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</span><br><span class="line">0 1 1 1 1 1 3 1 1 1 1 1 5 1 1 1 1 1 1 0</span><br><span class="line">0 1 1 1 0 0 1 1 1 1 1 1 1 1 1 1 1 3 1 0</span><br><span class="line">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0</span><br><span class="line">0 1 1 1 1 0 1 1 1 0 1 1 1 0 1 1 1 1 1 0</span><br><span class="line">0 1 1 1 1 1 1 1 1 1 8 1 1 1 1 1 1 1 1 0</span><br><span class="line">0 1 1 0 1 1 1 0 1 1 1 0 1 1 0 1 1 1 0 0</span><br><span class="line">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</span><br></pre></td></tr></table></figure>
+
+<p>那么就得看看通关条件和特殊机制了。</p>
+<p>接下来就是要看主函数内的各个变量分别代表什么，先从wasd逻辑推出行列的变量，再由此分别看代表现在位置的变量等等。把这三个变量判断出来之后：</p>
+<p>位置初始化为n19_2,在n0x14_1判定为成功，起点和终点位置可以确定，替换完变量之后可以看到上面78两个数字分别是起点终点；</p>
+<p><img src="/images/qctf2026/image31.png"></p>
+<p><img src="/images/qctf2026/image32.png"></p>
+<p><img src="/images/qctf2026/image33.png"></p>
+<p>看一眼逻辑：</p>
+<p><img src="/images/qctf2026/image34.png"></p>
+<p>0x14&#x3D;20，那么第一个判断逻辑是：如果行列超出20或者所在位置数字为0那么就判负；</p>
+<p>如果步数大于55判负；</p>
+<p>如果所在位置数字大于2小于6，那么向该方向继续移动[该格上的数字]格，同时注意是一步一步移动，所以不能穿墙；</p>
+<p>其它两个数字（1、2）没有特殊机制，应该可以当成普通的路来走。</p>
+<p>Ok看完逻辑之后：</p>
+<p>0是墙，12是路，345是滑行格，7是起点，8是终点。先替换一下：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓</span><br><span class="line">▓７＿＿＿＿３＿＿＿＿＿５＿＿＿＿＿＿▓</span><br><span class="line">▓＿＿＿＿＿＿＿▓▓＿＿＿＿＿＿＿３＿▓</span><br><span class="line">▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓＿▓▓</span><br><span class="line">▓＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿▓</span><br><span class="line">▓＿＿＿＿＿４＿＿＿＿＿＿３＿＿＿＿＿▓</span><br><span class="line">▓▓＿▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓</span><br><span class="line">▓＿＿＿＿３＿＿＿＿＿＿＿４＿＿＿＿＿▓</span><br><span class="line">▓＿＿▓▓＿＿＿＿＿＿＿＿＿＿＿＿３＿▓</span><br><span class="line">▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓＿▓▓</span><br><span class="line">▓＿＿＿＿＿４＿＿＿＿＿＿３＿＿＿＿＿▓</span><br><span class="line">▓＿＿＿＿＿＿＿＿▓▓＿＿＿＿＿▓＿＿▓</span><br><span class="line">▓▓＿▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓</span><br><span class="line">▓＿＿＿＿＿３＿＿＿＿＿５＿＿＿＿＿＿▓</span><br><span class="line">▓＿＿＿▓▓＿＿＿＿＿＿＿＿＿＿＿３＿▓</span><br><span class="line">▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓＿▓▓</span><br><span class="line">▓＿＿＿＿▓＿＿＿▓＿＿＿▓＿＿＿＿＿▓</span><br><span class="line">▓＿＿＿＿＿＿＿＿＿８＿＿＿＿＿＿＿＿▓</span><br><span class="line">▓＿＿▓＿＿＿▓＿＿＿▓＿＿▓＿＿＿▓▓</span><br><span class="line">▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓</span><br></pre></td></tr></table></figure>
+
+<p>然后就是快乐的走迷宫时间，手工玩一下序列就出来了，然后flag就有了。序列如下：</p>
+<p><code>DDDDDDDDSAAAAAAAASSDDDDDDDDSWAAAAAAAASSSDDDDDDDSAAAAAAA</code></p>
+<h3 id="Pangbai-Terraria"><a href="#Pangbai-Terraria" class="headerlink" title="Pangbai Terraria"></a>Pangbai Terraria</h3><p>哇是apk逆向，之前一直没做过apk逆向但是总觉得自己该试试，看这新手赛出了个apk逆向就来做做看吧。</p>
+<p>基本上是一边做一边学的状态，所以ai含量挺高的（捂脸</p>
+<p>首先用apktools解包，查看输出：</p>
+<p>第一问“第一个界面是怎么启动的？”，第一个界面的启动数据存在AndroidManifest.xml中，apktools解包后记事本打开可以看到一段flag：</p>
+<p><img src="/images/qctf2026/image35.png"></p>
+<p>第二问“字符串资源存在哪里？”字符串数据在res&#x2F;values&#x2F;strings.xml中，点开之后ctrl+f一下能够看到一段flag和一些提示；</p>
+<p><img src="/images/qctf2026/image36.png"></p>
+<p>第三问“静态文件资源一般存在哪个位置？”解包的assets文件夹是原样打包的文件，点进去之后能够看到一张flag的图片；</p>
+<p><img src="/images/qctf2026/image37.png"></p>
+<p>第四问“apk包名是什么？有什么作用？”</p>
+<p>Apk的包名是apk的唯一标识符，在安装时用于区分不同的应用。</p>
+<p>第五问“Activity是什么？怎么定位？”</p>
+<p>Activity是一个界面组件，也就是用户能够看到的一个app界面。</p>
+<p>结合前面得到的提示，我应该去看mainactivity的代码。</p>
+<p>通过看AndroidManifest.xml，得知使用jadx反编译后，mainactivity的代码应该在com&#x2F;huanghunr&#x2F;pangbaiterrai&#x2F;mainactivity.java,找到对应路径打开代码可以看到第四段flag；</p>
+<p><img src="/images/qctf2026/image38.png"></p>
+<p><img src="/images/qctf2026/image39.png"></p>
+<p>第六问“安卓的清单文件是哪个？有什么作用？”</p>
+<p>清单文件同样是AndroidManifest.xml。</p>
+<p>安卓的so文件是什么？</p>
+<p>？这不是我们ELF文件吗，你好你好。这个我认识。</p>
+<p>So文件存在lib文件夹里面，翻来覆去看只有一个文件，string一下就出来了。</p>
+<p><img src="/images/qctf2026/image40.png"></p>
+<p>拼接就得到总flag了。</p>
+<h3 id="芙"><a href="#芙" class="headerlink" title="芙"></a>芙</h3><p>依旧拿到图片先丢aperisolve</p>
+<p><img src="/images/qctf2026/image41.png"></p>
+<p>这次没有什么输出，但是pngcheck给出了一个报错，看IHDR的CRC格式也是一个八位的十六进制数，估计题目给的提示就在这里了，也就是说题目里面的这个数是正确的CRC</p>
+<p><img src="/images/qctf2026/image42.png"></p>
+<p>上网找了一下怎么修复CRC，搜到了这篇类似的解题思路。但是这个解题思路需要注意到宽度不变才能解题，如果宽高都被篡改这个方法就行不通了，因此需要其它的约束，为此我去问了一下ds</p>
+<p><img src="/images/qctf2026/image43.png"></p>
+<p>IHDR的CRC32是已经爆掉我们需要验证的东西，那么就只能看IDAT了。</p>
+<p><img src="/images/qctf2026/image44.png"></p>
+<p>公式也很简单。</p>
+<p>Pngcheck因为IHDR报错没有输出IDAT总长，问了ds试了好几个方法最后用xxd把IDAT的长度提取了出来</p>
+<p><img src="/images/qctf2026/image45.png"></p>
+<p><img src="/images/qctf2026/image46.png"></p>
+<p>Ok那把所有的IDAT长度都加起来是15607284，让ai写了个脚本爆破长宽：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> struct, zlib</span><br><span class="line">TARGET = <span class="number">0x051F503E</span></span><br><span class="line">RAW = <span class="number">15607284</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> w <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">40000</span>):</span><br><span class="line">    row = w*<span class="number">4</span> + <span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> RAW % row == <span class="number">0</span>:</span><br><span class="line">        h = RAW // row</span><br><span class="line">        crc = zlib.crc32(<span class="string">b&#x27;IHDR&#x27;</span> + struct.pack(<span class="string">&quot;&gt;IIBBBBB&quot;</span>, w, h, <span class="number">8</span>, <span class="number">6</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>)) &amp; <span class="number">0xffffffff</span></span><br><span class="line">        <span class="keyword">if</span> crc == TARGET:</span><br><span class="line">            <span class="built_in">print</span>(w, h)   </span><br></pre></td></tr></table></figure>
+
+<p>最后得到唯一解2560*1524.</p>
+<p>最后恢复这块也是ai帮忙写的脚本。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">d = <span class="built_in">bytearray</span>(<span class="built_in">open</span>(<span class="string">&quot;芙.png&quot;</span>,<span class="string">&quot;rb&quot;</span>).read())</span><br><span class="line">struct.pack_into(<span class="string">&quot;&gt;I&quot;</span>, d, <span class="number">16</span>, <span class="number">2560</span>)                       <span class="comment"># 改回宽度</span></span><br><span class="line">ihdr = <span class="built_in">bytes</span>(d[<span class="number">16</span>:<span class="number">29</span>])</span><br><span class="line">struct.pack_into(<span class="string">&quot;&gt;I&quot;</span>, d, <span class="number">29</span>, zlib.crc32(<span class="string">b&#x27;IHDR&#x27;</span>+ihdr))   <span class="comment"># 重算 CRC</span></span><br><span class="line"><span class="built_in">open</span>(<span class="string">&quot;fixed.png&quot;</span>,<span class="string">&quot;wb&quot;</span>).write(<span class="built_in">bytes</span>(d))</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/qctf2026/image47.png"></p>
+<p>就得到了恢复后的图片和flag。</p>
+<h3 id="Crypto签到"><a href="#Crypto签到" class="headerlink" title="Crypto签到"></a>Crypto签到</h3><p>我还说自己不会crypto，一看题干原来是古典密码，好怀念啊。</p>
+<p>题干写的很清楚，四栏的栅栏密码，然后解出来是24字的培根密码（看了眼密码总共120字，正好）</p>
+<p><img src="/images/qctf2026/image48.png"></p>
+<p><img src="/images/qctf2026/image49.png"></p>
+<p>flag{CROSS_THE_FENCE_AND_EAT_BACON}</p>
+<h3 id="ezRSA"><a href="#ezRSA" class="headerlink" title="ezRSA"></a>ezRSA</h3><p>看起来像是最简单的RSA形式，但是我不熟RSA，还是对着CTFwiki的介绍自己搓一下吧。</p>
+<p>先在<a target="_blank" rel="noopener" href="https://factordb.com/index.php?query=6277101735386680763835789512893946382249585600355786358579">factordb.com</a>把n分解为pq，然后找了一下，利用<a target="_blank" rel="noopener" href="https://www.cnblogs.com/Draina/p/18660198">RSA密钥生成-已知p、q、e求私钥d的python脚本 - Draina - 博客园</a>的脚本把d求出来，最后再根据c^d≡m(modN)的规律把m求出来。最后这一步直接让ai写脚本了。</p>
+<p><img src="/images/qctf2026/image50.png"></p>
+<p>得到flag{RSA_is_so_amazing}</p>
+<h3 id="失窃的数据"><a href="#失窃的数据" class="headerlink" title="失窃的数据"></a>失窃的数据</h3><p>一张图片和一个db文件。因为是第一次见这个后缀问了一下ds，.db后缀文件有很多种形式，需要看魔数才能确定具体类型。但是hexdump了一下发现文件开头没有明确的字符（像是PK这种能一眼看出来文件类型的），拿文件前几字节去搜也搜不到这是什么文件类型的魔数，于是把hexdump的输出丢给了ds。</p>
+<p><img src="/images/qctf2026/image51.png"></p>
+<p>看了一眼文件大小确实是4096的倍数，那估计实锤了。但是这是加密后的数据库文件，得找找密码是什么。还有一个图片，看了半天没什么密钥相关的线索，最后想起来丢aperisolve才发现有猫腻。这也不是图片隐写题啊怎么图片还有藏东西的，不理解。</p>
+<p>一个是EXIF里面的密钥</p>
+<p><img src="/images/qctf2026/image52.png"></p>
+<p>Base64解码得到Hello_?CTF_2026!</p>
+<p><img src="/images/qctf2026/image53.png"></p>
+<p>Ok，进入之后先把能看到的数据全看一遍。</p>
+<p>数据库里面东西好多。。dump出来慢慢看</p>
+<p>Dump出来发现东西还是很多，想完全看完几乎不可能，直接搜?CTF、flag也没有匹配，后面灵机一动想出两个思路，一个是去找base64编码字符串（字符‘&#x3D;’），另一个是找最新的数据（看图片里面的导出时间是7.2，数据库里面没有这个时间但是能搜到7.1的一条base编码）</p>
+<p><img src="/images/qctf2026/image54.png"></p>
+<p>结果这个解出来是个假flag，这还是简单题吗。</p>
+<p>结合题目中的“数据消失”，猜测应该是有需要“恢复数据”，问了ds说可以用.recover命令，接着同样dump出来</p>
+<p><img src="/images/qctf2026/image55.png"></p>
+<p>但是还是没有任何线索。</p>
+<hr>
+<p>在这里卡了好久，结果最后发现这张图还有东西。</p>
+<p>因为aperisolve的binwalk报错了导致我以为是没东西，结果自己一看怎么藏了个zip，我说出图片隐写好好出啊别一点线索都不给啊啊啊（后面复现的时候发现应该是aperisolve的binwalk默认使用的是binwalk -e，而这个7z和jpeg之间还有一段垃圾数据，导致aperisolve的binwalk识别到了有额外数据但是截取失败从而报错）</p>
+<p><img src="/images/qctf2026/image56.png"></p>
+<p>然后用tail命令切出来，解压之后得到一个db-wal文件，问了ds说它通常保存了文件消失前的快照，而用法是使用“PRAGMA wal_checkpoint(TRUNCATE);“命令将其与db文件合并。</p>
+<p>那么我就重新打开sqlcipher，将两者合并并重新看这些表，因为之前扫过一遍所以直奔core_credentials这个变量去</p>
+<p><img src="/images/qctf2026/image57.png"></p>
+<p>好哦，时间变了，内容也变了，拿去丢给cyberchef base64解码就得到flag了</p>
+<p>?CTF{861f73d2b6dbfec29ddcc22836e30f3a}</p>
+<h3 id="简单手撕平方根"><a href="#简单手撕平方根" class="headerlink" title="简单手撕平方根"></a>简单手撕平方根</h3><p>服务器首先会给你一个n，需要你提交一个x使得x同于a^2(mod n)，接受到正确的x后服务端返回两个数：y、c，有三种情况：y&#x3D;None：说明第一步x算错了；y同于+-a(mod n)：返回的是平凡根，无法继续，需要重新做一遍；第三种y同于+-b(mod n)就是可以用于解题的y了。而c是m^2mod n，也就是说m是c在mod n下的四个平方根之一。那么我们需要求：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rp = tonelli(c % p, p)</span><br><span class="line">rq = tonelli(c % q, q)</span><br></pre></td></tr></table></figure>
+
+<p>并用CRT组合，这样就可以求得这四个平方根，而四个平方根里面一定有一个是m。那就直接枚举就可以了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">crt</span>(<span class="params">a, b, p, q</span>):</span><br><span class="line">    <span class="keyword">return</span> (a + p * ((b - a) * <span class="built_in">pow</span>(p, -<span class="number">1</span>, q) % q)) % (p * q)</span><br><span class="line">roots = [</span><br><span class="line">    crt(rp,       rq,       p, q),</span><br><span class="line">    crt((-rp)%p,  rq,       p, q),</span><br><span class="line">    crt(rp,       (-rq)%q,  p, q),</span><br><span class="line">    crt((-rp)%p,  (-rq)%q,  p, q),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p>对于产出的四个平方根全部逆向解密，根据原算法flag被分成了两半，我们直接打印所有输出：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">decrypt_root</span>(<span class="params">M</span>):</span><br><span class="line">    <span class="keyword">if</span> M &gt;= (<span class="number">1</span> &lt;&lt; <span class="number">1024</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    data = M.to_bytes(<span class="number">128</span>, <span class="string">&quot;little&quot;</span>)</span><br><span class="line">    R1, L1 = data[:<span class="number">64</span>], data[<span class="number">64</span>:]</span><br><span class="line"></span><br><span class="line">    R0 = <span class="built_in">bytes</span>(a ^ b <span class="keyword">for</span> a, b <span class="keyword">in</span> <span class="built_in">zip</span>(R1, sha3_512(L1).digest()))</span><br><span class="line">    L0 = <span class="built_in">bytes</span>(a ^ b <span class="keyword">for</span> a, b <span class="keyword">in</span> <span class="built_in">zip</span>(L1, sha3_512(R0).digest()))</span><br><span class="line">    <span class="keyword">return</span> L0 + R0</span><br></pre></td></tr></table></figure>
+
+<p>然后在所有输出里面找flag就可以了。</p>
+<p>总的脚本：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> remote</span><br><span class="line"><span class="keyword">from</span> hashlib <span class="keyword">import</span> sha3_512</span><br><span class="line"><span class="keyword">from</span> math <span class="keyword">import</span> gcd</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">tonelli_shanks</span>(<span class="params">n, p</span>):</span><br><span class="line">    <span class="keyword">if</span> n == <span class="number">0</span>: <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">if</span> p == <span class="number">2</span>: <span class="keyword">return</span> n</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">pow</span>(n, (p - <span class="number">1</span>) // <span class="number">2</span>, p) != <span class="number">1</span>: <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    <span class="keyword">if</span> p % <span class="number">4</span> == <span class="number">3</span>: <span class="keyword">return</span> <span class="built_in">pow</span>(n, (p + <span class="number">1</span>) // <span class="number">4</span>, p)</span><br><span class="line">    q = p - <span class="number">1</span></span><br><span class="line">    s = <span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span> q % <span class="number">2</span> == <span class="number">0</span>:</span><br><span class="line">        q //= <span class="number">2</span></span><br><span class="line">        s += <span class="number">1</span></span><br><span class="line">    z = <span class="number">2</span></span><br><span class="line">    <span class="keyword">while</span> <span class="built_in">pow</span>(z, (p - <span class="number">1</span>) // <span class="number">2</span>, p) != p - <span class="number">1</span>: z += <span class="number">1</span></span><br><span class="line">    m = s</span><br><span class="line">    c = <span class="built_in">pow</span>(z, q, p)</span><br><span class="line">    t = <span class="built_in">pow</span>(n, q, p)</span><br><span class="line">    r = <span class="built_in">pow</span>(n, (q + <span class="number">1</span>) // <span class="number">2</span>, p)</span><br><span class="line">    <span class="keyword">while</span> t != <span class="number">1</span>:</span><br><span class="line">        i = <span class="number">1</span></span><br><span class="line">        tt = (t * t) % p</span><br><span class="line">        <span class="keyword">while</span> tt != <span class="number">1</span>:</span><br><span class="line">            tt = (tt * tt) % p</span><br><span class="line">            i += <span class="number">1</span></span><br><span class="line">        b = <span class="built_in">pow</span>(c, <span class="number">1</span> &lt;&lt; (m - i - <span class="number">1</span>), p)</span><br><span class="line">        r = (r * b) % p</span><br><span class="line">        t = (t * b * b) % p</span><br><span class="line">        c = (b * b) % p</span><br><span class="line">        m = i</span><br><span class="line">    <span class="keyword">return</span> r</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">crt</span>(<span class="params">a, b, p, q</span>):</span><br><span class="line">    <span class="keyword">return</span> (a + p * ((b - a) * <span class="built_in">pow</span>(p, -<span class="number">1</span>, q) % q)) % (p * q)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">decrypt_root</span>(<span class="params">M</span>):</span><br><span class="line">    <span class="keyword">if</span> M &gt;= (<span class="number">1</span> &lt;&lt; <span class="number">1024</span>): <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    data = M.to_bytes(<span class="number">128</span>, <span class="string">&quot;little&quot;</span>)</span><br><span class="line">    R1, L1 = data[:<span class="number">64</span>], data[<span class="number">64</span>:]</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># R0 = R1 xor H(L1)</span></span><br><span class="line">    R0 = <span class="built_in">bytes</span>(x ^ y <span class="keyword">for</span> x, y <span class="keyword">in</span> <span class="built_in">zip</span>(R1, sha3_512(L1).digest()))</span><br><span class="line">    <span class="comment"># L0 = L1 xor H(R0)</span></span><br><span class="line">    L0 = <span class="built_in">bytes</span>(x ^ y <span class="keyword">for</span> x, y <span class="keyword">in</span> <span class="built_in">zip</span>(L1, sha3_512(R0).digest()))</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> L0 + R0</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">attack</span>():</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;[*] 正在连接服务器...&quot;</span>)</span><br><span class="line">            io = remote(<span class="string">&quot;nc1.ctfplus.cn&quot;</span>, <span class="number">13308</span>)</span><br><span class="line">            </span><br><span class="line">            io.recvuntil(<span class="string">b&quot;n = &quot;</span>)</span><br><span class="line">            n = <span class="built_in">int</span>(io.recvline().strip())</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;[+] 获取到 n&quot;</span>)</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 2. 构造 x = a^2 mod n</span></span><br><span class="line">            a = random.randrange(<span class="number">2</span>, n - <span class="number">1</span>)</span><br><span class="line">            x = <span class="built_in">pow</span>(a, <span class="number">2</span>, n)</span><br><span class="line">            </span><br><span class="line">            io.recvuntil(<span class="string">b&quot;x = &quot;</span>)</span><br><span class="line">            io.sendline(<span class="built_in">str</span>(x).encode())</span><br><span class="line">            </span><br><span class="line">            line_y = io.recvline().strip()</span><br><span class="line">            y_str = line_y.split(<span class="string">b&quot;=&quot;</span>)[<span class="number">1</span>].strip()</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> y_str == <span class="string">b&quot;None&quot;</span>:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&quot;[-]返回了 None，重连...&quot;</span>)</span><br><span class="line">                io.close()</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">                </span><br><span class="line">            y = <span class="built_in">int</span>(y_str)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;[+] 获取到 y&quot;</span>)</span><br><span class="line">            </span><br><span class="line">            io.recvuntil(<span class="string">b&quot;c = &quot;</span>)</span><br><span class="line">            c = <span class="built_in">int</span>(io.recvline().strip())</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;[+] 获取到 c&quot;</span>)</span><br><span class="line">            io.close()</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 5. 分解 n</span></span><br><span class="line">            p = gcd(y - a, n)</span><br><span class="line">            <span class="keyword">if</span> p == <span class="number">1</span> <span class="keyword">or</span> p == n:</span><br><span class="line">                p = gcd(y + a, n)</span><br><span class="line">                </span><br><span class="line">            <span class="keyword">if</span> p == <span class="number">1</span> <span class="keyword">or</span> p == n:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&quot;[-]返回了平凡根，无法分解，重连...&quot;</span>)</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">                </span><br><span class="line">            q = n // p</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;[+] 成功分解 n!&quot;</span>)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;    p = <span class="subst">&#123;p&#125;</span>&quot;</span>)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;    q = <span class="subst">&#123;q&#125;</span>&quot;</span>)</span><br><span class="line">            </span><br><span class="line">            rp = tonelli_shanks(c % p, p)</span><br><span class="line">            rq = tonelli_shanks(c % q, q)</span><br><span class="line">            </span><br><span class="line">            roots = [</span><br><span class="line">                crt(rp, rq, p, q),</span><br><span class="line">                crt((-rp) % p, rq, p, q),</span><br><span class="line">                crt(rp, (-rq) % q, p, q),</span><br><span class="line">                crt((-rp) % p, (-rq) % q, p, q)</span><br><span class="line">            ]</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">for</span> M <span class="keyword">in</span> roots:</span><br><span class="line">                padded_flag = decrypt_root(M)</span><br><span class="line">                <span class="keyword">if</span> padded_flag <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">                    <span class="keyword">continue</span></span><br><span class="line">                <span class="keyword">if</span> <span class="string">b&quot;&#125;&quot;</span> <span class="keyword">in</span> padded_flag:</span><br><span class="line">                    idx = padded_flag.find(<span class="string">b&quot;&#125;&quot;</span>) + <span class="number">1</span></span><br><span class="line">                    flag = padded_flag[:idx]</span><br><span class="line">                    <span class="built_in">print</span>(<span class="string">f&quot;\n[🎉] 成功获取 Flag: <span class="subst">&#123;flag.decode(<span class="string">&#x27;utf-8&#x27;</span>, errors=<span class="string">&#x27;ignore&#x27;</span>)&#125;</span>&quot;</span>)</span><br><span class="line">                    <span class="keyword">return</span> flag</span><br><span class="line">                    </span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;[-] 发生异常: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">            <span class="keyword">try</span>: io.close()</span><br><span class="line">            <span class="keyword">except</span>: <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    attack()</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/qctf2026/image58.png"></p>
+<h2 id="WEEK2"><a href="#WEEK2" class="headerlink" title="WEEK2"></a>WEEK2</h2><h3 id="Miniupx"><a href="#Miniupx" class="headerlink" title="Miniupx"></a>Miniupx</h3><p>看题目描述像是自定义壳，拖进die一看应该是这样了。</p>
+<p><img src="/images/qctf2026/image59.png"></p>
+<p>这种就不能upx脱壳，而是要走自定义脱壳的路，我之前也做过这样的题，看着特别亲切。</p>
+<p>X64dbg打开，可以看到初始化一串操作后最终会跳转到1400014C0,那这个地址应该就是OEP了。</p>
+<p><img src="/images/qctf2026/image60.png"></p>
+<p>在140002E022上面下断点，触发后F7就会运行到OEP，此时打开x64dbg自带的scylla输入OEP→IAT Autosearch→Get Imports→删掉红色项→dump→对dump进行fix dump就可以得到输出的miniupx_dump_SCY.exe了。点开看看程序行为正常，太好了。（这是因为之前做的另一个自定义解壳的题目这么做完之后会报错，最后卡了很久问agent才知道是scylla的dump出错了。But why？？？我不理解。）</p>
+<p><img src="/images/qctf2026/image61.png"></p>
+<p>然后就直接拖入IDA进行分析</p>
+<p><img src="/images/qctf2026/image62.png"></p>
+<p>异或校验，感恩出题人没在算法上为难我</p>
+<p>异或的逻辑是检测input[i] ^ key[i%8] &#x3D;&#x3D; unk_14001D340[i]</p>
+<p>使用deepseek生成Py脚本如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> struct</span><br><span class="line">key = <span class="number">0x123456789ABCDEF0</span></span><br><span class="line">target = <span class="built_in">bytes</span>.fromhex(<span class="string">&quot;...&quot;</span>)  <span class="comment"># 从 0x14001D340 取 32 字节</span></span><br><span class="line">flag = <span class="string">b&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="number">32</span>, <span class="number">8</span>):</span><br><span class="line">    t = struct.unpack_from(<span class="string">&#x27;&lt;Q&#x27;</span>, target, i)[<span class="number">0</span>]</span><br><span class="line">    f = t ^ key</span><br><span class="line">    flag += struct.pack(<span class="string">&#x27;&lt;Q&#x27;</span>, f)</span><br><span class="line"><span class="built_in">print</span>(flag)</span><br></pre></td></tr></table></figure>
+
+<p>得到flag{This_is_a_loli_upx}</p>
+<p>一血，交上去之后就被排行榜隐藏了（瘫）。</p>
+<h3 id="数独"><a href="#数独" class="headerlink" title="数独"></a>数独</h3><p>好欸，又有东西可以玩了。</p>
+<p>拖die发现没什么东西，然后直接ida打开f5，看到是个数独。</p>
+<p><img src="/images/qctf2026/image63.png"></p>
+<p>好吧，做了一下发现原来这只是个例子，我就说怎么这么简单。看到下面就已经是处理输入的函数了，估计数独题干是在上面的initkey和recoverpuzzle两个函数里面。</p>
+<p>Initkey很简单：进行一些运算然后存到xxkey里面。</p>
+<p><img src="/images/qctf2026/image64.png"></p>
+<p>而recoverpuzzle里面有八百万个加密函数</p>
+<p><img src="/images/qctf2026/image65.png"></p>
+<p>没招了，一个一个看太费心了，而且想让ds写解密代码也老是写错&#x3D; &#x3D;</p>
+<p>后面想了想直接动调得了。理论上只需要知道recoverpuzzle函数执行完后，v6的值是多少就可以了。（recoverpuzzle函数的执行对象是v6，不妨先猜v6是数独地图。）</p>
+<p>在x64dbg内对IDA内看到的，recoverpuzzle 函数的retn指令的位置40206D下断点。</p>
+<p><img src="/images/qctf2026/image66.png"></p>
+<p>然后x64dbg打开程序，一路f9直到命中40206d的断点，接着f7跳出函数，此时puzzle地图应该已经初始化好了。</p>
+<p><img src="/images/qctf2026/image67.png"></p>
+<p>在IDA里可以看到v6的地址是在rbp+120&#x2F;rsp+1A0的地方，上一步做完F7后在x64dbg里面找到对应的内存地址。也就是61FE00：</p>
+<p><img src="/images/qctf2026/image68.png"></p>
+<p><img src="/images/qctf2026/image69.png"></p>
+<p>全都是1-8之间的数字，那应该就是想要的地图了。</p>
+<p>玩一下（圆珠笔写的是地图的格子，铅笔是我自己推的）</p>
+<p><img src="/images/qctf2026/image70.jpeg"></p>
+<p>好吧，玩到一半就已经猜出来结果了，出题人仍需努力，这个解太规整了有没有懂的</p>
+<p>因为从这里开始被ban交题了所以都得靠程序来看看flag对不对。拼好的地图如下：</p>
+<p><code>1234567856781234234567816781234534567812781234564567812381234567</code></p>
+<p><img src="/images/qctf2026/image71.png"></p>
+<p>对吧。</p>
+<p>得到flag的时间大概是10-10下午两三点，做完过了一天了结果还是有一血的，没法交题可惜了。</p>
+<p>（原来题干的“跑起来“是这个意思？）</p>
+<h3 id="二游武陵王的陷阱"><a href="#二游武陵王的陷阱" class="headerlink" title="二游武陵王的陷阱"></a>二游武陵王的陷阱</h3><p>这道好难！几乎是对着ds在做的这道题，自己复盘也有点云里雾里的，主要在于函数太多逻辑太杂不知道思路应该怎么构建从哪个逻辑开始看起，实际做出时间在花指令那道题之后，建议这两道换一下难度。。</p>
+<p>Die没看出什么异常，ida打开</p>
+<p>似乎是个抽卡exe，那完成条件应该就是出金之类的，shift+f12可以看到出金的函数；然后点进去把能看的函数都看了一遍，发现似乎是要抽到满命才算成功。按照正常题目的逻辑估计是不可能抽到满命的，所以要不就是分析程序逻辑反推flag要不就是动调改参数状态了。</p>
+<p>（这题函数太多了所以我都更名了一下来指示函数、变量的作用）</p>
+<p><img src="/images/qctf2026/image72.png"></p>
+<p>大概对着读了一下，一边读一边在标函数和变量的名称。</p>
+<p>程序的逻辑是：初始化、反复抽卡，还有两个机制：destinyclock和archive，archive应该没什么作用就是看看当前状态而已，destinyclock目前不知道有什么作用。</p>
+<p>单抽和十连的逻辑应该都是通过calculatepull函数来计算该抽的状态并赋值给pulltype，如果pulltype为0则是抽数不够，不为0则进入抽卡结果：</p>
+<p>可以看到，pulltype&#x3D;4的时候才抽中了限定金。</p>
+<p><img src="/images/qctf2026/image73.png"></p>
+<p><img src="/images/qctf2026/image74.png"></p>
+<p>最下面那里有个函数pullresult，golds就是当前出限定金的个数，而golds&#x3D;7就是满命了，紧接着的函数finalstar应该就是抽到满命后的逻辑</p>
+<p><img src="/images/qctf2026/image75.png"></p>
+<p>查看finalstar函数：</p>
+<p><img src="/images/qctf2026/image76.png"></p>
+<p>Flag应该就在buffer里，而buffer是由player当前的状态进行一系列运算操作之后得到的，看来还得我还原出player的当前状态。</p>
+<p><img src="/images/qctf2026/image77.png"></p>
+<p>一个是player+12，也就是初始化时候的player[3]，应该指的是当前命座的数量，作为基础的检查；</p>
+<p>另一个是player+4也就是player[1]，这个是加密中很重要的部分。（这里一开始的时候没有对player[1]初始化）。</p>
+<p>把所有函数都翻了一遍，看到两个地方对player[1]进行了操作：</p>
+<p>一个是初始化的时候最下面的函数401CF6，根据前面已经赋值的player[0]经过一系列计算之后最终初始化了player[1]；</p>
+<p><img src="/images/qctf2026/image78.png"></p>
+<p>另一个是在计算该抽具体是什么类型的函数calculatepull中引用到的一个函数player1change，满足特定情况时它会修改player[1]的值。</p>
+<p><img src="/images/qctf2026/image79.png"></p>
+<p><img src="/images/qctf2026/image80.png"></p>
+<p>然后看看这个“特定情况”的条件：</p>
+<p>点开401ca8，能够看到条件是当player[2]&#x3D;4053a0内的六个值或者100（看了一眼，是12,25,39,54,71,88,100的时候）触发。</p>
+<p><img src="/images/qctf2026/image81.png"></p>
+<p><img src="/images/qctf2026/image82.png"></p>
+<p>从profile函数里面可以看到，player[2]就是已抽的抽数。</p>
+<p><img src="/images/qctf2026/image83.png"></p>
+<p>Calculatepull里面还有几个函数，一个是给player的状态加命星的addconsellation函数，重点在于另一个函数（我标为calculateresult）。</p>
+<p><img src="/images/qctf2026/image84.png"></p>
+<p>点进去看到返回值是1234的时候就明白了，这个应该就是返回抽卡结果的函数。它return 4的情况有两种：一种是上面401ca8的逻辑，即会在第12,25,39,54,71,88抽卡时出金，第二是在第100次抽卡且已经出了六次金且n1763这个变量等于某个特定值的时候才会出金。也就是说如果想要抽到满命（第七个金）必须要触发第二个条件，那就得倒推n1763这个变量从哪里来。</p>
+<p><img src="/images/qctf2026/image85.png"></p>
+<p>n1763这个变量也就是calculatepull函数中的v3，回头看了一眼它被初始化为0，且在player1change函数内没有任何改变，那么改变v3值的只能是40230b这个函数。</p>
+<p><img src="/images/qctf2026/image86.png"></p>
+<p>点开看看，嗯一个简单的异或。点开408030一看竟然是未初始化数据，那得好好看看它的初始化是怎么进行的。</p>
+<p><img src="/images/qctf2026/image87.png"></p>
+<p>点开xref图一看，除了刚刚的40230b函数之外这个数据只被4022f8调用，且4022f8这个函数上游会经过init和destinyclock的修改。</p>
+<p>我服了，做到这我都忘了还有destinyclock这回事了。</p>
+<p><img src="/images/qctf2026/image88.png"></p>
+<p>结合来看的话是在初始化的时候401cf6函数会把player[0]输入rol4进行一系列计算，把计算出来的结果再赋值给408030.没什么大不了的，然后再看看destinyclock的机制。</p>
+<p>去掉一堆检查函数之后好像最终的逻辑就只在settime函数里面了。</p>
+<p><img src="/images/qctf2026/image89.png"></p>
+<p>Player[2]是已抽的抽数，也就是说如果抽过了卡就没法使用destinyclock更改时间了。</p>
+<p>更改时间的机制本质就是将player[0]改为HH:MM:SS的秒数再加上种子数1791504000，再调用401cf6将这个更改应用到player[1],同时更改408030这个数组。</p>
+<p><img src="/images/qctf2026/image90.png"></p>
+<p>到这个地方应该该摸的都摸完了。把现有的程序逻辑总结一下：</p>
+<p>开局初始化player，但是可以利用destinyclock修改；接着进行抽卡：会在12,25,39,54,71,88这六发的时候固定出金，并在100发的时候根据player初始化的结果来决定是否能够出第七个金。</p>
+<p>做到这一步的时候就大概理解了，之前还想着说能不能静态逆或者动态调试去找player[1]的状态再丢给ds写脚本解flag，现在看来理论上我只需要做一件事：找到能够让它出第七个金的初始化time。剩下的关于flag的操作，包括player[1]在运行中的修改以及它最后算flag的那个算法我都可以不写脚本全部交给程序来跑，我只负责最后验收flag就可以了。</p>
+<p>那么就把settime、401CF6、ROL4三个函数的计算逻辑喂给ds，让他计算出正确的输入时间接着正常运行程序就可以了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">M32 = <span class="number">0xFFFFFFFF</span></span><br><span class="line">PITY_R = <span class="number">0x691A3351</span>          </span><br><span class="line">TABLE = &#123;<span class="number">12</span>, <span class="number">25</span>, <span class="number">39</span>, <span class="number">54</span>, <span class="number">71</span>, <span class="number">88</span>&#125;   </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">sub_4022C0</span>(<span class="params">a1</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;0x4022C0: 由 player[0] 推出种子&quot;&quot;&quot;</span></span><br><span class="line">    x = (a1 ^ <span class="number">0xA5B35705</span>) &amp; M32</span><br><span class="line">    x = (x * <span class="number">0x9E3779B1</span>) &amp; M32</span><br><span class="line">    x = ((x &lt;&lt; <span class="number">7</span>) | (x &gt;&gt; <span class="number">25</span>)) &amp; M32     </span><br><span class="line">    <span class="keyword">return</span> (x - <span class="number">0x3910C8E0</span>) &amp; M32</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">xorshift32</span>(<span class="params">seed, n</span>):</span><br><span class="line">    s = seed &amp; M32</span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">        s ^= (s &lt;&lt; <span class="number">13</span>) &amp; M32</span><br><span class="line">        s ^= (s &gt;&gt; <span class="number">17</span>)</span><br><span class="line">        s ^= (s &lt;&lt; <span class="number">5</span>) &amp; M32</span><br><span class="line">    <span class="keyword">return</span> s</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">find_times</span>():</span><br><span class="line">    hits = []</span><br><span class="line">    <span class="keyword">for</span> off <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">86400</span>):                     </span><br><span class="line">        p0 = (off + <span class="number">0x6AC82E80</span>) &amp; M32</span><br><span class="line">        <span class="keyword">if</span> xorshift32(sub_4022C0(p0), <span class="number">100</span>) == PITY_R:</span><br><span class="line">            hits.append(off)</span><br><span class="line">    <span class="keyword">return</span> hits</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    hits = find_times()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;满足 [第100发 == 0x%08X] 的时间:&quot;</span> % PITY_R)</span><br><span class="line">    <span class="keyword">for</span> off <span class="keyword">in</span> hits:</span><br><span class="line">        h, m, s = off // <span class="number">3600</span>, off % <span class="number">3600</span> // <span class="number">60</span>, off % <span class="number">60</span></span><br><span class="line">        p0 = (off + <span class="number">0x6AC82E80</span>) &amp; M32</span><br><span class="line">        seed = sub_4022C0(p0)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;  %02d:%02d:%02d     player[0]=0x%08X  种子=0x%08X&quot;</span> % (h, m, s, p0, seed))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\n共 %d 个解&quot;</span> % <span class="built_in">len</span>(hits))</span><br></pre></td></tr></table></figure>
+
+<p>ok啊看了一下代码发现似乎不是逆推的而是穷举了一天内的所有时间点。</p>
+<p>也合理，每步的计算叠加起来就太复杂了，不如直接暴力枚举，一天只有86400秒也可以相信计算机的实力。</p>
+<p><img src="/images/qctf2026/image91.png"></p>
+<p>跑完发现有唯一解，那就运行程序拿flag就可以了。</p>
+<p><img src="/images/qctf2026/image92.png"></p>
+<p>点开程序然后选择4，输入给定的时间</p>
+<p>接着一路十连</p>
+<p><img src="/images/qctf2026/image93.png"></p>
+<p>在最后一发十连的时候成功抽出了六命然后得到flag{miao_final_wish_destiny_C6}</p>
+<p>解出时间为10-12 18:43此时还有三血</p>
+<p>感想是这题太绕了。写到这里感觉我在最后看到destinyclock之前的步骤好像不是特别必要（当然也有可能是我先入为主了。）</p>
+<p>但是能够把整个程序的逻辑都理清感觉也挺不错的，嗯（其实到现在我也不知道自己算不算理清了程序的逻辑）</p>
+<p>还有就是献祭出题人可以让我在下次抽卡的时候做到一百抽出六命吗（x</p>
+<h3 id="中国人能飞"><a href="#中国人能飞" class="headerlink" title="中国人能飞"></a>中国人能飞</h3><p>上来看到音频就直接拿sonic visualizer打开附件</p>
+<p><img src="/images/qctf2026/image94.png"></p>
+<p>哇大哥这是摩斯密码吧。</p>
+<p>对着输入一下</p>
+<p><img src="/images/qctf2026/image95.png"></p>
+<p>看来flag被分成了好几部分。紧接着这个音频里面似乎没什么线索了，突发奇想用记事本打开（其实是想像图片那样看看exif之类的输出但是不知道怎么看于是直接记事本打开了）看到了这个</p>
+<p><img src="/images/qctf2026/image96.png"></p>
+<p>那part2part3都出来了，part1很明显是在那个加密的txt里面。既然题目都给flag前缀了那不直接试一手明文爆破</p>
+<p>试了一圈下来发现没有结果，但是别的地方也找不到任何提示。。</p>
+<p>想了半天突然想到这会不会是个伪加密，但是拿zipcenop弄的时候出现了一个很诡异的情况：解压后的文件夹能正常打开，但是打开后是乱码，这个你真强.txt也不见踪影。（在之前用zipcenop的情况里，要不就是伪加密弄完后能够正常打开，要不就是弄完后打开报错（也就是真加密了），这次的情况真没见过）。问了一下ds说确实是伪加密，但是跟平常的伪加密有些不同：只改了加密标志位，其它一律没变。所以只需要把标志位还原就可以了。（看起来像是出题人手搓的伪加密啊）</p>
+<p>还原之后打开文件就可以看到part1了。</p>
+<p><img src="/images/qctf2026/image97.png"></p>
+<p>flag{7h3_Ch1n3$3_r3411y_c4n_ph1y!}</p>
+<h3 id="你跑不过我你信吗【没做完】"><a href="#你跑不过我你信吗【没做完】" class="headerlink" title="你跑不过我你信吗【没做完】"></a>你跑不过我你信吗【没做完】</h3><p><img src="/images/qctf2026/image98.png"></p>
+<p>我还得打开x64dbg调试才能看到这个消息</p>
+<p>哥你也没说要环境啊</p>
+<p>提示里说“不如分析程序本身”哥啊这是misc题</p>
+<p>拿ida打开看不出任何东西</p>
+<p>算了先直接双击运行看看具体做了什么东西吧</p>
+<p><img src="/images/qctf2026/image99.png"></p>
+<p>？这哪来的字符串，明明exe里面shift+f12啥东西都没出来。又看了眼文件夹发现估计是被exe骗了，打开dll一看果然在dll里面有东西。</p>
+<h3 id="百合"><a href="#百合" class="headerlink" title="百合"></a>百合</h3><p><img src="/images/qctf2026/image100.png"></p>
+<p>一套流程之后用ida打开，改了改变量名和函数名得到一个大致的函数流程，核心逻辑应该就在140001000这个地方了。</p>
+<p><img src="/images/qctf2026/image101.png"></p>
+<p>点过来一看，哇典型的花指令思维</p>
+<p>改完最开头这个花指令发现，哇下面的也全是花指令，一种是恒0跳转，另一种是改地址+retn跳转，题目里“量产的花”估计就是这意思了。</p>
+<p>还能怎么办？能工智人上线。</p>
+<p><img src="/images/qctf2026/image102.png"></p>
+<p>在IDA里面手搓去花一路搓到了最后的pop+retn</p>
+<p>我不知道这题官方解法是不是手搓去花如果不是的话那我只能说这个花指令还不够多（（之前见过那种完全手搓不了的题目给孩子累死了</p>
+<p>搓完之后把花指令的逻辑全部跳过，真正有用的指令就剩下几条：</p>
+<p><img src="/images/qctf2026/image103.png"><br><img src="/images/qctf2026/image104.png"><br><img src="/images/qctf2026/image105.png"><br><img src="/images/qctf2026/image106.png"><br><img src="/images/qctf2026/image107.png"><br><img src="/images/qctf2026/image108.png"><br><img src="/images/qctf2026/image109.png"><br><img src="/images/qctf2026/image110.png"><br><img src="/images/qctf2026/image111.png"><br><img src="/images/qctf2026/image112.png"><br><img src="/images/qctf2026/image113.png"><br><img src="/images/qctf2026/image114.png"><br><img src="/images/qctf2026/image115.png"><br><img src="/images/qctf2026/image116.png"><br><img src="/images/qctf2026/image117.png"><br><img src="/images/qctf2026/image118.png"><br><img src="/images/qctf2026/image119.png"><br><img src="/images/qctf2026/image120.png"><br><img src="/images/qctf2026/image121.png"><br><img src="/images/qctf2026/image122.png"><br><img src="/images/qctf2026/image123.png"><br><img src="/images/qctf2026/image124.png"></p>
+<p><img src="/images/qctf2026/image125.png"></p>
+<p><img src="/images/qctf2026/image126.png"></p>
+<p><img src="/images/qctf2026/image127.png"></p>
+<p><img src="/images/qctf2026/image128.png"></p>
+<p><img src="/images/qctf2026/image129.png"></p>
+<p><img src="/images/qctf2026/image130.png"><br><img src="/images/qctf2026/image131.png"><br><img src="/images/qctf2026/image132.png"><br><img src="/images/qctf2026/image133.png"><br><img src="/images/qctf2026/image134.png"><br><img src="/images/qctf2026/image135.png"></p>
+<p><img src="/images/qctf2026/image136.png"><br><img src="/images/qctf2026/image137.png"><br><img src="/images/qctf2026/image138.png"></p>
+<p>花指令解完之后还不能直接f5，只能读汇编了。于是我又返回代码开头手截了一遍有用的信息得到了上面一堆图（捂脸）</p>
+<p>先看有引用的两个外部函数14F0和1670：</p>
+<p>14F0里面有个字符集，数了一下猜测是base58解码（后面问了一下ds确实是）；</p>
+<p><img src="/images/qctf2026/image139.png"></p>
+<p>1670的移位操作看起来很像TEA系列算法，虽然外层循环只有四次但是内部循环了很多次（数了数一共十二次，也就是总共有48轮）。</p>
+<p><img src="/images/qctf2026/image140.png"></p>
+<p>对比了一下标准的TEA&#x2F;XTEA&#x2F;XXTEA算法发现都不仅仅是改了数据，而是整个算法都改了，本来还想套用解码脚本的套用不了了，可恶啊。</p>
+<p>你知道的我是re手而不是密码手所以密码的东西就丢给Deepseek解决吧（逃）</p>
+<p>先把一些前置工作做好：四个TEA的key可以通过上面的代码算出来：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">key[0]=0xDEADC0DE^0xBAADF00D=0x640030D3</span><br><span class="line">key[1]=0x11111111+0x22222222=0x33333333</span><br><span class="line">key[2]=0xFEDCBA98-0x12345678=0xECA86420</span><br><span class="line">key[3]=0xCAFEF00D^0xFACEB00C=0x30304001</span><br></pre></td></tr></table></figure>
+
+<p>（出题人小巧思之deadcode，badfood，cafefood，facebook）</p>
+<p>然后把需要解码的那串字符串拿去丢给cyberchef：</p>
+<p><img src="/images/qctf2026/image141.png"></p>
+<p>（这里卡了我一下因为base58解出来是乱码，而我看到又确实是base58且不是自定义码表，然后问了ds说就是base58，而且解出来是乱码也正常，因为解出来之后还要经过tea才会变成flag，所以我就先把解码完后的密文copy下来了）</p>
+<p><code>a8 ad 9c 3a 86 8a 1b 98 c6 cc 91 f3 ca 1d 29 b5 7e 46 91 09 9d 62 ff 7b d0 41 c5 d6 ae b9 d9 c3</code></p>
+<p>然后全部丢给deepseek让他写tea解密脚本：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> struct</span><br><span class="line"></span><br><span class="line">cipher_hex = <span class="string">&quot;a8ad9c3a868a1b98c6cc91f3ca1d29b57e4691099d62ff7bd041c5d6aeb9d9c3&quot;</span></span><br><span class="line">cipher = <span class="built_in">bytes</span>.fromhex(cipher_hex)</span><br><span class="line"></span><br><span class="line">key = [<span class="number">0x640030D3</span>, <span class="number">0x33333333</span>, <span class="number">0xECA86420</span>, <span class="number">0x30304001</span>]</span><br><span class="line">delta = <span class="number">0x9E3779B9</span></span><br><span class="line">mask = <span class="number">0xFFFFFFFF</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">decrypt_block</span>(<span class="params">v0, v1</span>):</span><br><span class="line">    <span class="built_in">sum</span> = (delta * <span class="number">96</span>) &amp; mask</span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">48</span>):</span><br><span class="line">        v1 = (v1 - ((((v0 &lt;&lt; <span class="number">4</span>) &amp; mask) ^ (v0 &gt;&gt; <span class="number">5</span>)) + v0 + <span class="built_in">sum</span> + key[(<span class="built_in">sum</span> &gt;&gt; <span class="number">11</span>) &amp; <span class="number">3</span>])) &amp; mask</span><br><span class="line">        <span class="built_in">sum</span> = (<span class="built_in">sum</span> - delta) &amp; mask</span><br><span class="line">        v0 = (v0 - ((((v1 &lt;&lt; <span class="number">4</span>) &amp; mask) ^ (v1 &gt;&gt; <span class="number">5</span>)) + v1 + <span class="built_in">sum</span> + key[<span class="built_in">sum</span> &amp; <span class="number">3</span>])) &amp; mask</span><br><span class="line">        <span class="built_in">sum</span> = (<span class="built_in">sum</span> - delta) &amp; mask</span><br><span class="line">    <span class="keyword">return</span> v0, v1</span><br><span class="line"></span><br><span class="line">plain = <span class="string">b&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="number">32</span>, <span class="number">8</span>):</span><br><span class="line">    v0, v1 = struct.unpack(<span class="string">&quot;&lt;II&quot;</span>, cipher[i:i+<span class="number">8</span>])</span><br><span class="line">    v0, v1 = decrypt_block(v0, v1)</span><br><span class="line">    plain += struct.pack(<span class="string">&quot;&lt;II&quot;</span>, v0, v1)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;[*] 解密结果 hex:&quot;</span>, plain.<span class="built_in">hex</span>())</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;[+] Flag:&quot;</span>, plain.decode(<span class="string">&#x27;ascii&#x27;</span>))</span><br><span class="line"><span class="keyword">except</span> UnicodeDecodeError:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;[!] 解密结果不是纯 ASCII，可能包含不可打印字符。&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;    原始字节:&quot;</span>, plain)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/qctf2026/image142.png"></p>
+<p>Flag: flag{tw1n_catgirls_flower_b1oom}</p>
+<p>？！拉拉！？</p>
+<p>？！Twin Bloom！？</p>
+<p>感想是：re题难点为什么是算法……</p>
+<p>得到flag的时间是10-11 14:32，此时还有二血，交不了可惜了</p>
+<h2 id="WEEK3"><a href="#WEEK3" class="headerlink" title="WEEK3"></a>WEEK3</h2><p>因为太无聊了所以准时蹲点开week3这是可以说的吗</p>
+<p>希望这周的题不会太难。。</p>
+<p>完蛋了比w2的难了不止一个档次。</p>
+<p>完蛋了学校事怎么这么多我没时间做题了。</p>
+<h3 id="Ezhook"><a href="#Ezhook" class="headerlink" title="Ezhook"></a>Ezhook</h3><p>Die看着没问题然后ida打开</p>
+<p>点进主函数标了一下变量名目前没什么大问题，再把加密函数看一遍也没什么大问题（应该）。</p>
+<p>读取输入，然后把最后的换行符去掉，然后检测长度是不是31，然后就进入到算法的部分了。一套加密之后跟密文s2_比较，如果正确就算成功。</p>
+<p><img src="/images/qctf2026/image143.png"></p>
+<p>那么按照题目的意思这文件里面肯定有个hook会修改一些东西，所以就先去翻TLS&#x2F;CRT看看有没有什么奇怪的东西。</p>
+<p>不对这是个elf文件好像没这些东西。</p>
+<p>我没学过这个，现学一下吧，看看elf文件有什么类似的东西。</p>
+<p>Ok啊大肥鱼也是很快给出了答案</p>
+<p><img src="/images/qctf2026/image144.png"></p>
+<p>然后在ida里面ctrl+F一下”init”找到这个程序有initarray，没有init_tls且.init段似乎直接跳到main了。</p>
+<p><img src="/images/qctf2026/image145.png"></p>
+<p>点过去看看</p>
+<p><img src="/images/qctf2026/image146.png"></p>
+<p>就两个函数，401520和401190，分别看一下。</p>
+<p><img src="/images/qctf2026/image147.png"></p>
+<p>？！滚木！？</p>
+<p><img src="/images/qctf2026/image148.png"></p>
+<p>我靠我看不懂这个函数在干什么怎么办。</p>
+<p>算了，只挑看得懂的看。很明显这里改了main函数里面出现的s_字符串，还改了401530这个位置的值，把s_字符串的实现看一下：</p>
+<p><img src="/images/qctf2026/image149.png"></p>
+<p>写死的数据，也只有这两个函数在修改，那直接按照修改后的来看就好了。</p>
+<p><img src="/images/qctf2026/image150.png"></p>
+<p>401530是函数之间一个孤立的数据，不知道有什么用。我在想它更改之后很可能是一个函数指令，把几个函数连起来。再看这个赋值是负数，所以就去问了一下ds：</p>
+<p><img src="/images/qctf2026/image151.png"></p>
+<p>那就ida把这个地方改成C3</p>
+<p><img src="/images/qctf2026/image152.png"></p>
+<p>按c，看到是一个retn指令。目前不知道有什么用。因为旁边这俩函数的结构也不明不白的，除了刚刚的401190也没有任何xref指向这里。。。</p>
+<p>好像一圈下来也就是改了一个s_的值。</p>
+<p>然后就去看看两个加密函数吧。</p>
+<p>看了一圈下来发现是个RC4的KSA+PRGA流程，上网找个脚本一对发现是完全标准的RC4，那就直接套用网上的脚本解密就可以了。</p>
+<p>脚本：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">CIPHERTEXT_HEX = (</span><br><span class="line">    <span class="string">&quot;8a58710d922711d588f3d5159e4308ae&quot;</span></span><br><span class="line">    <span class="string">&quot;0c1336186f52f935a4988f92b16d58&quot;</span></span><br><span class="line">)</span><br><span class="line">KEY = <span class="string">b&quot;CrazyHook!&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">rc4</span>(<span class="params">key: <span class="built_in">bytes</span>, data: <span class="built_in">bytes</span></span>) -&gt; <span class="built_in">bytes</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Textbook RC4 (KSA + PRGA). key: 1..256 bytes.&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> key:</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">&quot;empty key&quot;</span>)</span><br><span class="line">    S = <span class="built_in">list</span>(<span class="built_in">range</span>(<span class="number">256</span>))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># --- KSA ---</span></span><br><span class="line">    j = <span class="number">0</span></span><br><span class="line">    klen = <span class="built_in">len</span>(key)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">256</span>):</span><br><span class="line">        j = (j + S[i] + key[i % klen]) &amp; <span class="number">0xFF</span></span><br><span class="line">        S[i], S[j] = S[j], S[i]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># --- PRGA ---</span></span><br><span class="line">    i = j = <span class="number">0</span></span><br><span class="line">    out = <span class="built_in">bytearray</span>(<span class="built_in">len</span>(data))</span><br><span class="line">    <span class="keyword">for</span> n, b <span class="keyword">in</span> <span class="built_in">enumerate</span>(data):</span><br><span class="line">        i = (i + <span class="number">1</span>) &amp; <span class="number">0xFF</span></span><br><span class="line">        j = (j + S[i]) &amp; <span class="number">0xFF</span></span><br><span class="line">        S[i], S[j] = S[j], S[i]</span><br><span class="line">        out[n] = b ^ S[(S[i] + S[j]) &amp; <span class="number">0xFF</span>]</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">bytes</span>(out)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>() -&gt; <span class="literal">None</span>:</span><br><span class="line">    <span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line">    ct_hex = sys.argv[<span class="number">1</span>] <span class="keyword">if</span> <span class="built_in">len</span>(sys.argv) &gt; <span class="number">1</span> <span class="keyword">else</span> CIPHERTEXT_HEX</span><br><span class="line">    key = sys.argv[<span class="number">2</span>].encode() <span class="keyword">if</span> <span class="built_in">len</span>(sys.argv) &gt; <span class="number">2</span> <span class="keyword">else</span> KEY</span><br><span class="line"></span><br><span class="line">    ct = <span class="built_in">bytes</span>.fromhex(ct_hex)</span><br><span class="line">    pt = rc4(key, ct)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;key        : <span class="subst">&#123;key!r&#125;</span> (len <span class="subst">&#123;<span class="built_in">len</span>(key)&#125;</span>)&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;ciphertext : <span class="subst">&#123;ct.<span class="built_in">hex</span>()&#125;</span> (<span class="subst">&#123;<span class="built_in">len</span>(ct)&#125;</span> bytes)&quot;</span>)</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        shown = pt.decode(<span class="string">&quot;ascii&quot;</span>)</span><br><span class="line">    <span class="keyword">except</span> UnicodeDecodeError:</span><br><span class="line">        shown = <span class="built_in">repr</span>(pt)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;plaintext  : <span class="subst">&#123;shown&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/qctf2026/image153.png"></p>
+<p>flag{Y0u_F1nd_th1z_Crazy_H0ok!}</p>
+<p>解出时间10-17 10:58，一血。</p>
+<p>嗯对我还是想知道那个C3的意义是什么。。</p>
+<h3 id="Magicpng"><a href="#Magicpng" class="headerlink" title="Magicpng"></a>Magicpng</h3><p>拿到图二话不说直接丢aperisolve，虽然没看到什么特别有用的信息但是注意到了三个小东西：</p>
+<p><img src="/images/qctf2026/image154.png"></p>
+<p>第一是LSB长成这样很像是藏了东西，再一看图片大小是271*278很难不怀疑剩下这七格里面有些小零食;</p>
+<p>第二是binwalk识别出来有附加数据；</p>
+<p>第三是zsteg输出了一个很长的字符串，看到是等号结尾猜测是base64</p>
+<p><img src="/images/qctf2026/image155.png"></p>
+<p><img src="/images/qctf2026/image156.png"></p>
+<p>丢cyberchef发现是一串摩斯，再丢给摩斯就出来了。</p>
+<p><img src="/images/qctf2026/image157.png"></p>
+<p>好吧，真是LSB，看来zsteg直接跳步了。（也不能这么说，应该说是zsteg直接把lsb隐写读出来了）</p>
+<p>flag{M0RS3_4FT3R_B64_1N_LSB}</p>
+<p>解出时间10-17 17:53 #16</p>
+<h3 id="Signal"><a href="#Signal" class="headerlink" title="Signal"></a>Signal</h3><p>看题目的意思似乎是要动态调试</p>
+<p>打开程序一看是一大堆看不懂的东西，void main都来了，</p>
+<p>Ctrl+F一下看到了验证的字符串</p>
+<p><img src="/images/qctf2026/image158.png"></p>
+<p>但是上面两个甚至没有xref。神了</p>
+<p>下面那个xref跳过去也看不懂，神了。</p>
+<p>那只能动调试试了。看题目的意思似乎是要捉动调判断结果的那一瞬间。。？</p>
+<p>过了几天来看一眼，第一个提示上的跟没有一样</p>
+<p>过了几天来看一眼，第二个提示看不懂，估计是一些我没学过的东西…等官方wp了。</p>
+<h3 id="宝石魔术"><a href="#宝石魔术" class="headerlink" title="宝石魔术"></a>宝石魔术</h3><p>看到三血出的好快，就过来做一下</p>
+<p><img src="/images/qctf2026/image159.png"></p>
+<p>对加密的flag进行解密然后跟input对比就出了，这对吗。</p>
+<p>那就来看一眼这个解密吧。</p>
+<p><img src="/images/qctf2026/image160.png"></p>
+<p>好多函数。一个个看吧</p>
+<p>查了一下前面两个函数，是在解析一个PE文件，再看后面的参数minipe，点过去是一大坨数据，后面跟着一些像是程序开始压栈操作的指令。本来没看懂的切成hex view一看开头是MZ就看懂了。</p>
+<p><img src="/images/qctf2026/image161.png"></p>
+<p><img src="/images/qctf2026/image162.png"></p>
+<p>不是，到这我算是理解了，一开始在想为什么附件名是minipe但是下载下来一看是个elf，原来这个pe文件内嵌在elf里面呢</p>
+<p>那百度了一下开头两个函数的函数名发现就是两件事情：一个是解析文件结构，另一个是把RVA转成RAW。查了一下才发现RAW就是文件偏移地址（File Offset Address），之前一直记的是FOA，导致一开始以为是转成raw data（何意味）。</p>
+<p>Recoveraeskey是一个简单的运算函数，运算中修改了v4的值，应该是把aes key存在v4中；</p>
+<p>Deobfuscateblock同理，是输入v2解密，并把解密后的结果存在了v5中。</p>
+<p>然后把v4 v5和丢进aes解密，输出到flag里面。问了一下ds这个地方是标准的aes。最后有一部修改尾部字符，没什么大影响。</p>
+<p>V2初始化为0，在rvatoraw函数里面调用了一次，估计是这里改了v2的值；那就去看看rvatoraw函数的具体实现：</p>
+<p><img src="/images/qctf2026/image163.png"></p>
+<p>还有v3的事，v3还是前面那个parseheaders函数生成的，好麻烦。</p>
+<p><img src="/images/qctf2026/image164.png"></p>
+<p>V3还要靠v6生成。。v6还要v9生成。。好麻烦。</p>
+<p>Parseheader函数是首先检查minipe开头是不是77 90（也就是4D 5A，MZ头）然后将0x3F赋值为minipe+30的32byte（4字节）</p>
+<p>转到hex view发现不对劲怎么全是00，然后去问大肥鱼发现</p>
+<p><img src="/images/qctf2026/image165.png"></p>
+<p>好吧建议回炉重修程序设计，给孩子忘完了。</p>
+<p>也就是说实际取的是minipe+60的位置，换成十六进制是0x3C。</p>
+<p>MZ头在402020，所以实际读的位置是40253C，值为80，</p>
+<p><img src="/images/qctf2026/image166.png"></p>
+<p>额好吧做到这步发现我学过这个。（下图为之前学的时候写的学习笔记）</p>
+<p><img src="/images/qctf2026/image167.png"></p>
+<p>V9是minipe[80+4]，转到hex view是4020A4，这个位置是IMAGE_FILE_HEADER的起始地址。（我之前一直是用llvm去直接读header，没有特别去记PE头里面这些字段的位置，包括学习笔记里面也没有记这个，搞得我又去翻了一遍参考资料。。看来还得好好记一下）</p>
+<p>然后v6是v9+2的16byte，也就是4020A6，这个地方存的是NumbersOfSections，值为02.</p>
+<p>下面的n0x6F指向的是4020B4（80+16），这个地方存的是SizeOfOptionalHeader，值为F0;</p>
+<p>所以rvatoraw里面要用到的两个数据，v3+2就是NumbersOfSections，v3+8就是SizeOfOptionalHeader再往后偏移24。根据看PE头能够得出来的信息，OptionalHeader的长度就是F0，这就相当于指向的地址是OptionalHeader后面的节表起始位置了。或者可以这么看：v3+8&#x3D;0x80（MZ到PE头的长度）+24（PE头到ImageFileHeader结尾的长度）+0xF0（OptionalHeader的长度），接下来就是节表的位置了。</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/WolvenSec/article/details/144591194">PE文件结构：节表_pe文件节表-CSDN博客</a></p>
+<p>嗯于是又对着这个学了一下节表，看完这个之后对函数变量的意义就清晰许多了。</p>
+<p>再把函数流程放一遍，标好了变量之后来看看函数的具体实现。</p>
+<p><img src="/images/qctf2026/image168.png"></p>
+<p>最后要的这个v2指针应该是对应miniPE中一个变量的具体地址。前面做到操作都是遍历所有节，最终找到在miniPE里面偏移量为8208的值（我也不知道为什么，这个地方是一个一个节表遍历去找，如果上一个节表长度不足就用8208-节表长度再将指针移到下个节表去找，最后v2是通过节表内部的偏移去算的，有什么理由不直接用相对程序开头的偏移去算吗…？）</p>
+<p>嗯所以我就直接在hex view里面找到相同偏移的地方（拿计算器进制转换了一下也就是2010，对应绝对地址是402430），然后就把这里的数据提取出来就可以了。</p>
+<p><img src="/images/qctf2026/image169.png"></p>
+<p>接着就是ds脚本时间。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Crypto.Cipher <span class="keyword">import</span> AES</span><br><span class="line"></span><br><span class="line"><span class="comment"># AES Key</span></span><br><span class="line">encoded_aes_key = <span class="built_in">bytes</span>([</span><br><span class="line">    <span class="number">0x9D</span>, <span class="number">0x60</span>, <span class="number">0x04</span>, <span class="number">0xCB</span>, </span><br><span class="line">    <span class="number">0x11</span>, <span class="number">0x55</span>, <span class="number">0x82</span>, <span class="number">0x78</span>, </span><br><span class="line">    <span class="number">0x30</span>, <span class="number">0x4D</span>, <span class="number">0xC4</span>, <span class="number">0x1E</span>, </span><br><span class="line">    <span class="number">0xEA</span>, <span class="number">0x66</span>, <span class="number">0x07</span>, <span class="number">0x52</span></span><br><span class="line">])</span><br><span class="line"></span><br><span class="line"><span class="comment"># AES Cipher</span></span><br><span class="line">raw_ciphertext = <span class="built_in">bytes</span>([</span><br><span class="line">    <span class="number">0xFB</span>, <span class="number">0x00</span>, <span class="number">0x6D</span>, <span class="number">0xC9</span>, </span><br><span class="line">    <span class="number">0x59</span>, <span class="number">0xEE</span>, <span class="number">0x9C</span>, <span class="number">0x0F</span>, </span><br><span class="line">    <span class="number">0xED</span>, <span class="number">0x35</span>, <span class="number">0x15</span>, <span class="number">0xDF</span>, </span><br><span class="line">    <span class="number">0xEE</span>, <span class="number">0x9D</span>, <span class="number">0xD3</span>, <span class="number">0xA4</span></span><br><span class="line">])</span><br><span class="line"></span><br><span class="line"><span class="comment"># recover_aes_key</span></span><br><span class="line"><span class="comment"># 逻辑: key[i] = encoded_key[i] ^ 0x5A</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">recover_aes_key</span>(<span class="params">encoded_key</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">bytes</span>(b ^ <span class="number">0x5A</span> <span class="keyword">for</span> b <span class="keyword">in</span> encoded_key)</span><br><span class="line"></span><br><span class="line"><span class="comment"># deobfuscate_block</span></span><br><span class="line"><span class="comment"># 逻辑: out[i] = in[i] ^ ((i + 0x33) &amp; 0xFF) ^ ((7 * i) &amp; 0xFF) ^ 0xA5</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">deobfuscate_block</span>(<span class="params">raw_data</span>):</span><br><span class="line">    deobfuscated = <span class="built_in">bytearray</span>()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(raw_data)):</span><br><span class="line">        mask = ((i + <span class="number">0x33</span>) &amp; <span class="number">0xFF</span>) ^ ((<span class="number">7</span> * i) &amp; <span class="number">0xFF</span>) ^ <span class="number">0xA5</span></span><br><span class="line">        deobfuscated.append(raw_data[i] ^ mask)</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">bytes</span>(deobfuscated)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 恢复 AES Key</span></span><br><span class="line">aes_key = recover_aes_key(encoded_aes_key)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;[+] 恢复出的 AES-128 Key: <span class="subst">&#123;aes_key.<span class="built_in">hex</span>()&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解混淆原始密文</span></span><br><span class="line">ciphertext = deobfuscate_block(raw_ciphertext)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;[+] 异或解混淆后的密文:    <span class="subst">&#123;ciphertext.<span class="built_in">hex</span>()&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 AES-128-ECB 无填充模式 (NoPadding) 解密</span></span><br><span class="line">cipher = AES.new(aes_key, AES.MODE_ECB)</span><br><span class="line">plaintext = cipher.decrypt(ciphertext)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;[+] 解密出的原始字节:      <span class="subst">&#123;plaintext.<span class="built_in">hex</span>()&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 截断 \x00 并转换为字符串输出</span></span><br><span class="line">flag = plaintext.rstrip(<span class="string">b&#x27;\x00&#x27;</span>).decode(<span class="string">&#x27;utf-8&#x27;</span>, errors=<span class="string">&#x27;replace&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;[+] 最终 Flag:             <span class="subst">&#123;flag&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/qctf2026/image170.png"></p>
+<p>flag{M1n1PE_R3c0v3ry!}</p>
+<p><img src="/images/qctf2026/image171.png"></p>
+<p>验证正确，拿到flag的时间是10-18 16:45（#6）。</p>
+<p>没想象中简单啊，估计是涉及到了一些PE文件的基础知识之类的，感觉缺了这块之后做起来好麻烦。</p>
+<p>感觉这题就是在考PE头的基础知识（？）看来我还得恶补一下。</p>
+<h2 id="WEEK4"><a href="#WEEK4" class="headerlink" title="WEEK4"></a>WEEK4</h2><p>一周都在干别的事，然后过了几天上平台看了一眼发现没有超过三解的</p>
+<p>于是</p>
+<p>摆烂了。</p>
+<h3 id="问卷（MISC）"><a href="#问卷（MISC）" class="headerlink" title="问卷（MISC）"></a>问卷（MISC）</h3><p><img src="/images/qctf2026/image172.png"></p>
+<p>我交这个不会给我封了吧，我不敢交。（逃）</p>
+<p><img src="/images/qctf2026/image173.png"></p>
+<p>感谢主办方&#x2F;出题人能够给我一个这么好的机会。好久没有玩CTF玩的这么开心了。</p>
+<p>只是可惜后两周没时间打了，好好等wp吧（os：yuan真是劳模吧</p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>?CTF2026 Writeup (Misc/Reverse/Crypto)</p><p><a href="https://augrottos.github.io/2026/11/10/qctf2026/">https://augrottos.github.io/2026/11/10/qctf2026/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><a href="https://augrottos.github.io"><p>Augrottos</p></a></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2026-11-10</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2026-11-10</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a class="icon" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a><a class="icon" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="recommend-area"><div class="recommend-post"><span class="is-size-6 has-text-grey has-mr-7"># Related Post</span><br><span>  1.<a class="is-size-6" href="/2026/11/03/abench/" target="_blank">论文精读之AuthBench</a><br></span><span>  2.<a class="is-size-6" href="/2026/10/10/LLMVA/" target="_blank">论文精读之LLM-VA</a><br></span><span>  3.<a class="is-size-6" href="/2026/10/08/leakk/" target="_blank">论文精读之leak@k</a><br></span><span>  4.<a class="is-size-6" href="/2026/10/07/ipid/" target="_blank">论文精读之IPIDefense</a><br></span><span>  5.<a class="is-size-6" href="/2026/09/26/agentdrift/" target="_blank">论文精读之AgentDrift</a><br></span><span>  6.<a class="is-size-6" href="/2026/09/18/IAT/" target="_blank">rev学习笔记7-IAT修复</a><br></span><span>  7.<a class="is-size-6" href="/2026/09/15/tryingagent/" target="_blank">初次使用agent。</a><br></span><span>  8.<a class="is-size-6" href="/2026/07/29/TLS/" target="_blank">rev学习笔记6-TLS回调函数、CRT初始化</a><br></span></div></div><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/social-share.js/1.0.16/css/share.min.css"><div class="social-share"></div><script src="https://cdnjs.loli.net/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2026/11/03/abench/"><span class="level-item">论文精读之AuthBench</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--><!--!--></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">Catalogue</h3><ul class="menu-list"><li><a class="is-flex is-mobile" href="#前言"><span>前言</span></a></li><li><a class="is-flex is-mobile" href="#WEEK1"><span>WEEK1</span></a><ul class="menu-list"><li><a class="is-flex is-mobile" href="#OSINT"><span>OSINT</span></a></li><li><a class="is-flex is-mobile" href="#Base家族"><span>Base家族</span></a></li><li><a class="is-flex is-mobile" href="#压缩包"><span>压缩包</span></a></li><li><a class="is-flex is-mobile" href="#Multilingual"><span>Multilingual</span></a></li><li><a class="is-flex is-mobile" href="#HelloAssembly"><span>HelloAssembly</span></a></li><li><a class="is-flex is-mobile" href="#meowmeow"><span>meowmeow</span></a></li><li><a class="is-flex is-mobile" href="#intro"><span>intro</span></a></li><li><a class="is-flex is-mobile" href="#零"><span>零</span></a></li><li><a class="is-flex is-mobile" href="#StrangeRC4"><span>StrangeRC4</span></a></li><li><a class="is-flex is-mobile" href="#艾克赛尔"><span>艾克赛尔</span></a></li><li><a class="is-flex is-mobile" href="#Pangbai-Terraria"><span>Pangbai Terraria</span></a></li><li><a class="is-flex is-mobile" href="#芙"><span>芙</span></a></li><li><a class="is-flex is-mobile" href="#Crypto签到"><span>Crypto签到</span></a></li><li><a class="is-flex is-mobile" href="#ezRSA"><span>ezRSA</span></a></li><li><a class="is-flex is-mobile" href="#失窃的数据"><span>失窃的数据</span></a></li><li><a class="is-flex is-mobile" href="#简单手撕平方根"><span>简单手撕平方根</span></a></li></ul></li><li><a class="is-flex is-mobile" href="#WEEK2"><span>WEEK2</span></a><ul class="menu-list"><li><a class="is-flex is-mobile" href="#Miniupx"><span>Miniupx</span></a></li><li><a class="is-flex is-mobile" href="#数独"><span>数独</span></a></li><li><a class="is-flex is-mobile" href="#二游武陵王的陷阱"><span>二游武陵王的陷阱</span></a></li><li><a class="is-flex is-mobile" href="#中国人能飞"><span>中国人能飞</span></a></li><li><a class="is-flex is-mobile" href="#你跑不过我你信吗【没做完】"><span>你跑不过我你信吗【没做完】</span></a></li><li><a class="is-flex is-mobile" href="#百合"><span>百合</span></a></li></ul></li><li><a class="is-flex is-mobile" href="#WEEK3"><span>WEEK3</span></a><ul class="menu-list"><li><a class="is-flex is-mobile" href="#Ezhook"><span>Ezhook</span></a></li><li><a class="is-flex is-mobile" href="#Magicpng"><span>Magicpng</span></a></li><li><a class="is-flex is-mobile" href="#Signal"><span>Signal</span></a></li><li><a class="is-flex is-mobile" href="#宝石魔术"><span>宝石魔术</span></a></li></ul></li><li><a class="is-flex is-mobile" href="#WEEK4"><span>WEEK4</span></a><ul class="menu-list"><li><a class="is-flex is-mobile" href="#问卷（MISC）"><span>问卷（MISC）</span></a></li></ul></li></ul></div></div><style>.menu-list > li > a.is-active + .menu-list { display: block; }.menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="https://avatars.githubusercontent.com/u/268848168?s=400&amp;u=a8c9a01792e6cf06504e591c3a51a49955b77926&amp;v=4" alt="𝐀𝐮𝐠𝐫𝐨𝐭𝐭𝐨𝐬"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">𝐀𝐮𝐠𝐫𝐨𝐭𝐭𝐨𝐬</p><p class="is-size-6 is-block">and in that light I find deliverance.</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>Mondstadt</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">Posts</p><a href="/archives/"><p class="title">16</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Categories</p><a href="/categories/"><p class="title">0</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Tags</p><a href="/tags/"><p class="title">4</p></a></div></div></nav><div><hr><p id="hitokoto">:D 一言句子获取中...</p><script type="text/javascript" defer>function getYiyan(){
+                                $.getJSON("https://v1.hitokoto.cn/", function (data) {
+                                if(data){
+                                    $('#hitokoto').html("");
+                                    $('#hitokoto').append("<strong style='color: #3273dc;'>"+data.hitokoto+"</strong>"+
+                                    "<p>"+"From《"+data.from+"》</p><p>Provider-"+data.creator+"</p>");
+                                }});}
+                                $(function (){getYiyan();$('#hitokoto').click(function(){getYiyan();})});</script></div></div></div><div class="card widget" data-type="links"><div class="card-content"><div class="menu"><h3 class="menu-label">Links</h3><ul class="menu-list"><li><a class="level is-mobile" href="https://Durin.me" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">My Blog</span></span><span class="level-right"><span class="level-item tag">durin.me</span></span></a></li></ul></div></div></div><div class="card widget"><div class="card-content"><h3 class="menu-label">Recents</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-11-10T12:50:00.000Z">2026-11-10</time></p><p class="title"><a href="/2026/11/10/qctf2026/">?CTF2026 Writeup (Misc/Reverse/Crypto)</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-11-03T13:11:39.000Z">2026-11-03</time></p><p class="title"><a href="/2026/11/03/abench/">论文精读之AuthBench</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-10-10T12:50:03.000Z">2026-10-10</time></p><p class="title"><a href="/2026/10/10/LLMVA/">论文精读之LLM-VA</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-10-08T12:50:03.000Z">2026-10-08</time></p><p class="title"><a href="/2026/10/08/leakk/">论文精读之leak@k</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-10-07T12:50:03.000Z">2026-10-07</time></p><p class="title"><a href="/2026/10/07/ipid/">论文精读之IPIDefense</a></p></div></article></div></div><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">Archives</h3><ul class="menu-list"><li><a class="level is-mobile is-marginless" href="/archives/2026/11/"><span class="level-start"><span class="level-item">November 2026</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2026/10/"><span class="level-start"><span class="level-item">October 2026</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2026/09/"><span class="level-start"><span class="level-item">September 2026</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2026/07/"><span class="level-start"><span class="level-item">July 2026</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2026/06/"><span class="level-start"><span class="level-item">June 2026</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><a class="level is-mobile is-marginless" href="/archives/"><span class="level-start"><span class="level-item">查看全部&gt;&gt;</span></span></a></ul></div></div></div><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">Tags</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/%E5%AD%A6%E4%B9%A0/"><span class="tag">学习</span><span class="tag is-grey-lightest">16</span></a></div><div class="control"><a class="tags has-addons" href="/tags/CTF/"><span class="tag">CTF</span><span class="tag is-grey-lightest">8</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Agentic-Security/"><span class="tag">Agentic Security</span><span class="tag is-grey-lightest">5</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E7%94%9F%E6%B4%BB/"><span class="tag">生活</span><span class="tag is-grey-lightest">1</span></a></div></div></div></div></div><!--!--><div class="column-right-shadow is-hidden-widescreen"></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="https://wiki.arcaea.cn/images/avatars/2034/original.png?ver=69c51bd8" alt="Augrottos&#039; Study Notes" height="28"></a><p class="size-small"><span>&copy; 2026 Augrottos</span>  Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank">Icarus</a> &amp; <a href="https://github.com/removeif/hexo-theme-amazing" target="_blank">Amazing</a> <br><span>© 版权说明：[本网站所有内容均收集于互联网或自己创作,<br />&nbsp;&nbsp;&nbsp;&nbsp;方便于网友与自己学习交流，如有侵权，请<a href="/message" target="_blank">留言</a>，立即处理]<br /> #footer 版权说明 可自由配置</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/removeif/hexo-theme-amazing"><i class="fab fa-github"></i></a></p></div><div class="sideMusic"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="/js/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script><meting-js style="width: auto;height: 2000px;" server="netease" type="playlist" id="17900462501" theme="#2980b9" loop="all" autoplay="false" order="list" storageName="aplayer-setting" lrctype="0" list-max-height="400px" fixed="true"></meting-js></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" async></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script data-pjax src="/js/insight.js" defer></script><script data-pjax>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script><script type="text/javascript">var pjax = new Pjax({
+            elements: "a",//代表点击链接就更新
+            selectors: [  //代表要更新的节点
+                ".section",
+                "title"
+            ],
+            cache: true,
+            cacheBust:false
+        })
+
+        function loadBusuanzi(){
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js", function () {});
+        }
+
+        function loadMathJax() { //加载mathjax
+            $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function () {
+                MathJax.Hub.Config({ tex2jax: { inlineMath: [['$', '$'], ['\(', '\)']] } });
+                var math = document.getElementsByClassName("entry-content")[0];
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub, math]);
+            });
+        };
+
+        // 开始 PJAX 执行的函数
+        document.addEventListener('pjax:send', function () {
+        });
+        
+        // PJAX 完成之后执行的函数，可以和上面的重载放在一起
+        document.addEventListener('pjax:complete', function () {
+            $(".section").css({opacity:1});
+            if(false){
+                $.getScript('/js/comment-issue-data.js',function(){loadIssueData('undefined','undefined','undefined','undefined',undefined);});
+            }
+            if(false){
+                loadMathJax();
+            }
+            loadMainJs(jQuery, window.moment, window.ClipboardJS, window.IcarusThemeSettings);
+            loadBackTop();
+            loadBusuanzi();
+            if(typeof loadBanner == 'function'){
+                loadBanner();
+            }
+        });</script></body></html>
